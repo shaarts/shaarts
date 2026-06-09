@@ -6,10 +6,36 @@ export default function Layout({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Scroll to top on route change
+  // Initialize Google Analytics on mount
+  useEffect(() => {
+    if (!CONFIG.GOOGLE_ANALYTICS_ID || CONFIG.GOOGLE_ANALYTICS_ID === 'G-XXXXXXXXXX') return;
+
+    if (!document.getElementById('google-analytics-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-analytics-script';
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.GOOGLE_ANALYTICS_ID}`;
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', CONFIG.GOOGLE_ANALYTICS_ID);
+    }
+  }, []);
+
+  // Scroll to top and track page view on route change
   useEffect(() => {
     window.scrollTo(0, 0);
     setIsMobileMenuOpen(false);
+
+    if (window.gtag && CONFIG.GOOGLE_ANALYTICS_ID && CONFIG.GOOGLE_ANALYTICS_ID !== 'G-XXXXXXXXXX') {
+      window.gtag('config', CONFIG.GOOGLE_ANALYTICS_ID, {
+        page_path: location.pathname,
+      });
+    }
   }, [location.pathname]);
 
   // Dynamic header transparency logic
