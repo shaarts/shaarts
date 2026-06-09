@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+    background-color: #F5F2ED; /* Specific Parchment from DESIGN.md */
+    color: #1A1A1A; /* Deep Charcoal from DESIGN.md */
+    font-family: 'Hanken Grotesk', sans-serif;
+    position: relative;
+    min-height: 100vh;
+  }
+}
+
+/* Global Subtle Grain Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./assets/textures/natural-paper.png");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: multiply;
+}
+
+/* Alternative Handmade Paper Grain Overlay for components */
+.handmade-grain {
+  position: relative;
+}
+
+.handmade-grain::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./assets/textures/handmade-paper.png");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 5;
+  mix-blend-mode: multiply;
+}
+
+/* Material Symbols Outlined Custom configurations */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+/* Asymmetrical Masonry Grid Classes */
+.masonry-grid {
+  column-count: 1;
+}
+
+@media (min-width: 768px) {
+  .masonry-grid {
+    column-count: 2;
+    column-gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 3;
+    column-gap: 3rem;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 2rem;
+}
+
+/* Custom fade reveal transition classes */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Image Hover Card transitions */
+.art-hover-overlay {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.art-card:hover .art-hover-overlay {
+  opacity: 1;
+}
+
+.art-card:hover img {
+  transform: scale(1.02);
+}
