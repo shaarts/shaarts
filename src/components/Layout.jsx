@@ -26,16 +26,68 @@ export default function Layout({ children }) {
     }
   }, []);
 
-  // Scroll to top and track page view on route change
+  // Scroll to top, track page views, and update dynamic SEO meta tags on route change
   useEffect(() => {
     window.scrollTo(0, 0);
     setIsMobileMenuOpen(false);
 
+    // Track Page View with Google Analytics
     if (window.gtag && CONFIG.GOOGLE_ANALYTICS_ID && CONFIG.GOOGLE_ANALYTICS_ID !== 'G-XXXXXXXXXX') {
       window.gtag('config', CONFIG.GOOGLE_ANALYTICS_ID, {
         page_path: location.pathname,
       });
     }
+
+    // Dynamic SEO Configuration mapping
+    let title = 'Shaarts Calligraphy | Luxury Arabic Calligraphy & Islamic Fine Art';
+    let description = 'Explore the luxury Arabic calligraphy portfolio of Shaarts. Discover bespoke Quranic verses, concentric Asmaul Husna, and modern Islamic art masterpieces.';
+    const siteUrl = 'https://shaarts.com';
+    const path = location.pathname;
+
+    if (path === '/') {
+      title = 'Shaarts Calligraphy | Luxury Arabic Calligraphy & Islamic Fine Art';
+      description = 'Explore the luxury Arabic calligraphy portfolio of Shaarts. Discover bespoke Quranic verses, concentric Asmaul Husna, and modern Islamic art masterpieces.';
+    } else if (path === '/gallery') {
+      title = 'Art Gallery | Shaarts Calligraphy Masterpieces';
+      description = 'Browse a curated selection of exquisite Arabic calligraphy paintings by Shaarts, from classical Thuluth and concentric Asmaul Husna to modern square Kufic script sets.';
+    } else if (path === '/custom-calligraphy') {
+      title = 'Custom Calligraphy Commissions | Shaarts Fine Art';
+      description = 'Inquire about custom Arabic calligraphy commissions for private collectors and institutions worldwide. Bring your favorite Quranic verses to life in a bespoke painting.';
+    } else if (path === '/craft') {
+      title = 'The Craft & Process | Shaarts Calligraphy';
+      description = 'Discover the artisanal process behind luxury Arabic calligraphy, detailing traditional reed pens, hand-made soot ink, and burnished vintage paper.';
+    }
+
+    // Update document title
+    document.title = title;
+
+    // Update meta name="title"
+    const metaTitle = document.querySelector('meta[name="title"]');
+    if (metaTitle) metaTitle.setAttribute('content', title);
+
+    // Update meta description
+    const metaDesc = document.getElementById('meta-description');
+    if (metaDesc) metaDesc.setAttribute('content', description);
+
+    // Update Open Graph (Facebook / LinkedIn) tags
+    const ogTitle = document.getElementById('og-title');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+
+    const ogDesc = document.getElementById('og-description');
+    if (ogDesc) ogDesc.setAttribute('content', description);
+
+    const ogUrl = document.getElementById('og-url');
+    if (ogUrl) ogUrl.setAttribute('content', `${siteUrl}${path}`);
+
+    // Update Twitter Card tags
+    const twitterTitle = document.getElementById('twitter-title');
+    if (twitterTitle) twitterTitle.setAttribute('content', title);
+
+    const twitterDesc = document.getElementById('twitter-description');
+    if (twitterDesc) twitterDesc.setAttribute('content', description);
+
+    const twitterUrl = document.getElementById('twitter-url');
+    if (twitterUrl) twitterUrl.setAttribute('content', `${siteUrl}${path}`);
   }, [location.pathname]);
 
   // Dynamic header transparency logic
