@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Lightbox from '../components/Lightbox';
 
 // Import local image assets
-import pieceFatiha from '../assets/artwork/piece-fatiha.jpg';
-import pieceGoldenBreath from '../assets/artwork/piece-golden-breath.jpg';
-import pieceLineageStudy from '../assets/artwork/piece-lineage-study.jpg';
-import pieceSilentPath from '../assets/artwork/piece-silent-path.jpg';
-import pieceOceanicRhythms from '../assets/artwork/piece-oceanic-rhythms.jpg';
-import pieceManifestation from '../assets/artwork/piece-manifestation.jpg';
+import pieceAyatulKursiSilver from '../assets/artwork/piece-ayatul-kursi-silver.jpg';
+import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
+import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
+import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
+import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState('ALL');
@@ -19,55 +18,46 @@ export default function Gallery() {
       title: 'Ayatul Kursi (Verse of the Throne)',
       category: 'Throne Verse Series',
       filterKey: 'CLASSICAL',
-      medium: 'Textured Acrylic & Gold Leaf on Canvas',
-      dimensions: '100x100cm',
-      description: 'The monumental Throne Verse (Quran 2:255) rendered in classic proportions over an earthy, textured acrylic background with hand-applied gold strokes.',
-      src: pieceFatiha,
+      medium: 'Acrylic, Ink & Silver Leaf on Canvas',
+      dimensions: '80x120cm',
+      description: 'A majestic rendering of the Throne Verse (Ayatul Kursi) in elegant Thuluth script, featuring a vibrant red circular centerpiece set against a textured silver-metallic background.',
+      src: pieceAyatulKursiSilver,
     },
     {
-      title: 'Tawakkul (Divine Trust)',
-      category: 'Modern Abstract',
+      title: 'The Four Quls (Square Kufic Set)',
+      category: 'Geometric Kufic',
       filterKey: 'MODERN',
-      medium: 'Acrylic Pour & Gold Leaf on Canvas',
-      dimensions: '80x80cm',
-      description: 'An abstract visual representation of Tawakkul—having complete trust in the Divine path. Features fluid pouring paint with sweeping gold leaf scripts.',
-      src: pieceGoldenBreath,
+      medium: 'Mixed Media & Gold Acrylic on Canvas (Set of 4)',
+      dimensions: '50x50cm each',
+      description: 'A modern, geometric square Kufic script rendering of the Four Quls (Surah Al-Kafirun, Al-Ikhlas, Al-Falaq, and An-Nas) in red, blue, green, and charcoal canvas blocks.',
+      src: pieceFourQuls,
     },
     {
-      title: 'Sabr & Shukr (Patience & Gratitude)',
-      category: 'Commissioned Diptych',
+      title: 'Asmaul Husna (Concentric Circles)',
+      category: 'Concentric Series',
+      filterKey: 'CLASSICAL',
+      medium: 'Textured Ink & Gold Paint on Crimson Velvet Board',
+      dimensions: '90x90cm',
+      description: 'The 99 Beautiful Names of Allah meticulously written in concentric circular layers in elegant Thuluth script surrounding the central name of Allah.',
+      src: pieceNamesOfAllahRed,
+    },
+    {
+      title: 'Stained Glass Mihrab',
+      category: 'Bespoke Arch Series',
       filterKey: 'CUSTOM_CALLIGRAPHY',
-      medium: 'Acrylic & Gold Foil on Wood Panel',
-      dimensions: '60x60cm each',
-      description: 'A custom double panel design rendering the concepts of Sabr (Patience) and Shukr (Gratitude) in interlocking Diwani script.',
-      src: pieceLineageStudy,
+      medium: 'Gold Leaf & Acrylic on Wood Arch Panel',
+      dimensions: '100x150cm',
+      description: 'A stunning bespoke arch design reminiscent of Islamic stained-glass windows, featuring intricate gold leaf floral patterns and Quranic script bordering the blue arch.',
+      src: pieceStainedGlassBlue,
     },
     {
-      title: 'Al-Hadi (The Guide - Quran 26:62)',
-      category: 'Spiritual Reminders',
-      filterKey: 'CLASSICAL',
-      medium: 'Fluid Art & Gold Script on Canvas',
-      dimensions: '40x120cm',
-      description: 'An elongated, peaceful scroll featuring the Quranic verse: "Indeed, my Lord is with me, He will guide me" rendered in gold leaf over deep charcoal washes.',
-      src: pieceSilentPath,
-    },
-    {
-      title: 'The City of Light (Madina Silhouette)',
-      category: 'Typographical Maps',
-      filterKey: 'MODERN',
-      medium: 'Mixed Media Acrylic on Canvas',
-      dimensions: '90x120cm',
-      description: 'An experimental silhouette structure of the city of Madina built entirely out of layered calligraphy letters of blessings and guidance.',
-      src: pieceOceanicRhythms,
-    },
-    {
-      title: 'Asmaul Husna (The 99 Beautiful Names)',
-      category: 'Geometric Showcase',
-      filterKey: 'CLASSICAL',
-      medium: 'Carbon Ink & Gold Accents on Ahar Paper',
-      dimensions: '80x80cm',
-      description: 'A structured, geometric Kufic rendering of the 99 Beautiful Names of Allah, balance-scaled in a museum-quality layout.',
-      src: pieceManifestation,
+      title: 'Surah Al-Fatiha Circular Medallion',
+      category: 'Custom Radial Series',
+      filterKey: 'CUSTOM_CALLIGRAPHY',
+      medium: 'Gold Ink & Acrylic Spray on Circular Wood Panel',
+      dimensions: '80cm Diameter',
+      description: 'A circular wooden masterpiece displaying Surah Al-Fatiha in a radial gold calligraphic border surrounding a red and white floral damask pattern.',
+      src: pieceCircularRed,
     },
   ];
 

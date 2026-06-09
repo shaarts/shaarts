@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 // Import local image assets
 import heroBg from '../assets/artwork/hero-bg.jpg';
 import aboutArtist from '../assets/artwork/about-artist.png';
-import pieceBaqarah from '../assets/artwork/piece-baqarah.jpg';
-import pieceGoldLeaf from '../assets/artwork/piece-gold-leaf.jpg';
-import pieceAbstract from '../assets/artwork/piece-abstract.jpg';
-import pieceMural from '../assets/artwork/piece-mural.jpg';
-import pieceFatiha from '../assets/artwork/piece-fatiha.jpg';
-import pieceSilentPath from '../assets/artwork/piece-silent-path.jpg';
+import pieceAyatulKursiSilver from '../assets/artwork/piece-ayatul-kursi-silver.jpg';
+import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
+import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
+import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
+import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
 import craftInk from '../assets/artwork/craft-ink.jpg';
 import craftPaper from '../assets/artwork/craft-paper.jpg';
 
@@ -142,43 +141,74 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[1200px]">
-          {/* Large Focus Item */}
+          {/* Item 1: Large Focus Item - Ayatul Kursi */}
           <div className="md:col-span-8 md:row-span-2 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
             <img
-              src={pieceBaqarah}
-              alt="Ayatul Kursi"
+              src={pieceAyatulKursiSilver}
+              alt="Ayatul Kursi (Verse of the Throne)"
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             />
             <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
               <p className="font-label-md text-label-md mb-2">Throne Verse Series</p>
               <h3 className="font-headline-md text-headline-md">Ayatul Kursi</h3>
             </div>
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
 
-          {/* Side Items */}
-          <div className="md:col-span-4 reveal-on-scroll overflow-hidden group border border-primary/10 p-4">
+          {/* Item 2: Side Item - The Four Quls */}
+          <div className="md:col-span-4 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
             <img
-              src={pieceGoldLeaf}
-              alt="Gold Leaf Calligraphy Detail"
+              src={pieceFourQuls}
+              alt="The Four Quls (Square Kufic Set)"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-          </div>
-          <div className="md:col-span-4 reveal-on-scroll overflow-hidden group border border-primary/10 p-4">
-            <img
-              src={pieceAbstract}
-              alt="Modern Abstract Letterforms"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <p className="font-label-md text-label-md mb-2">Geometric Kufic</p>
+              <h3 className="font-headline-md text-headline-md">The Four Quls</h3>
+            </div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
 
-          {/* Wide Bottom Item */}
-          <div className="md:col-span-12 reveal-on-scroll overflow-hidden group border border-primary/10 p-4 h-96">
+          {/* Item 3: Side Item - Asmaul Husna */}
+          <div className="md:col-span-4 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
             <img
-              src={pieceMural}
-              alt="Calligraphy Mural Gallery Display"
+              src={pieceNamesOfAllahRed}
+              alt="Asmaul Husna (Concentric Circles)"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
+            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <p className="font-label-md text-label-md mb-2">Concentric Series</p>
+              <h3 className="font-headline-md text-headline-md">Asmaul Husna</h3>
+            </div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
+
+          {/* Item 4: Bottom Left Item - Stained Glass Mihrab */}
+          <div className="md:col-span-8 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
+            <img
+              src={pieceStainedGlassBlue}
+              alt="Stained Glass Mihrab"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <p className="font-label-md text-label-md mb-2">Bespoke Arch Series</p>
+              <h3 className="font-headline-md text-headline-md">Stained Glass Mihrab</h3>
+            </div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
+
+          {/* Item 5: Bottom Right Item - Surah Al-Fatiha Circular Medallion */}
+          <div className="md:col-span-4 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
+            <img
+              src={pieceCircularRed}
+              alt="Surah Al-Fatiha Circular Medallion"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <p className="font-label-md text-label-md mb-2">Custom Radial Series</p>
+              <h3 className="font-headline-md text-headline-md">Surah Al-Fatiha</h3>
+            </div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
         </div>
       </section>
