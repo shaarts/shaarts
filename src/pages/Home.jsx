@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // Import local image assets
@@ -9,8 +9,6 @@ import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
 import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
 import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
 import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
-import craftInk from '../assets/artwork/craft-ink.jpg';
-import craftPaper from '../assets/artwork/craft-paper.jpg';
 
 export default function Home() {
   // Trigger Instagram embed processing
@@ -117,18 +115,6 @@ export default function Home() {
                 "When you create with the sole intention of serving Him — He puts barakah (blessings) in every single brushstroke."
               </p>
             </div>
-            <div className="pt-6">
-              <Link
-                id="about-explore-craft"
-                to="/craft"
-                className="group inline-flex items-center gap-4 border-b border-primary py-2 font-label-md text-label-md text-primary hover:text-gold-leaf hover:border-gold-leaf transition-all duration-300"
-              >
-                EXPLORE THE CRAFT
-                <span className="material-symbols-outlined group-hover:translate-x-2 transition-transform duration-300">
-                  arrow_forward
-                </span>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -230,13 +216,6 @@ export default function Home() {
               className="px-10 py-4 bg-primary text-white font-label-md text-label-md tracking-widest hover:bg-gold-leaf transition-colors duration-300"
             >
               INQUIRE NOW
-            </Link>
-            <Link
-              id="teaser-view-process"
-              to="/craft"
-              className="px-10 py-4 border border-primary text-primary font-label-md text-label-md tracking-widest hover:bg-primary hover:text-white transition-all duration-300"
-            >
-              VIEW PROCESS
             </Link>
           </div>
         </div>

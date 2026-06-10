@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import commissionShowcase from '../assets/artwork/commission-showcase.png';
-import { CONFIG } from '../config';
 
 export default function Commissions() {
   const [formData, setFormData] = useState({
@@ -27,23 +26,10 @@ export default function Commissions() {
 
     setFormStatus('SENDING');
 
-    // Construct the WhatsApp message with form details
-    const whatsappText = `New Commission Inquiry:\n\n` +
-      `• Name: ${formData.name}\n` +
-      `• Email: ${formData.email}\n` +
-      `• Desired Style: ${formData.style}\n` +
-      `• Size/Medium: ${formData.size || 'Not Specified'}\n` +
-      `• Project Description: ${formData.description || 'Not Specified'}`;
-
-    const whatsappUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappText)}`;
-
-    // Mock network request before redirecting/opening WhatsApp
+    // Simulate network request before success feedback
     setTimeout(() => {
       setFormStatus('SUCCESS');
       
-      // Open WhatsApp in a new tab
-      window.open(whatsappUrl, '_blank');
-
       // Reset form
       setFormData({
         name: '',

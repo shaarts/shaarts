@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Lightbox from '../components/Lightbox';
 
 // Import local image assets
