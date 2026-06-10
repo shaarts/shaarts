@@ -52,6 +52,9 @@ export default function Layout({ children }) {
     } else if (path === '/custom-calligraphy') {
       title = 'Custom Calligraphy Commissions | Shaarts Fine Art';
       description = 'Inquire about custom Arabic calligraphy commissions for private collectors and institutions worldwide. Bring your favorite Quranic verses to life in a bespoke painting.';
+    } else if (path === '/privacy') {
+      title = 'Privacy Policy | Shaarts Calligraphy';
+      description = 'Read our Privacy Policy to understand how we protect and handle your personal data at Shaarts Calligraphy.';
     }
 
     // Update document title
@@ -205,11 +208,30 @@ export default function Layout({ children }) {
         {/* Drawer Footer info */}
         <div className="absolute bottom-8 left-8 right-8 text-on-surface-variant opacity-75">
           <div className="w-full h-px bg-primary/10 mb-6"></div>
-          <p className="font-label-md text-xs tracking-wider mb-2">CONNECT</p>
-          <div className="flex gap-4 mb-6 text-sm">
-            <a href="https://www.instagram.com/shaarts_calligraphy/" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors font-medium">Instagram</a>
-            <span className="text-primary/20">•</span>
-            <a href={CONFIG.FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors font-medium">Facebook</a>
+          <p className="font-label-md text-xs tracking-wider mb-3">CONNECT</p>
+          <div className="flex gap-5 mb-6">
+            <a
+              href="https://www.instagram.com/shaarts_calligraphy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-on-surface-variant hover:text-secondary transition-colors duration-300"
+              aria-label="Instagram"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+              </svg>
+            </a>
+            <a
+              href={CONFIG.FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-on-surface-variant hover:text-secondary transition-colors duration-300"
+              aria-label="Facebook"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
           </div>
           <p className="font-body-md text-xs">© 2026 Shaarts Calligraphy.</p>
         </div>
@@ -240,10 +262,31 @@ export default function Layout({ children }) {
               © 2026 Shaarts Calligraphy. All Rights Reserved.
             </p>
           </div>
-          <div className="flex gap-8">
-            <a className="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="https://www.instagram.com/shaarts_calligraphy/" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a className="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href={CONFIG.FACEBOOK_URL} target="_blank" rel="noopener noreferrer">Facebook</a>
-            <a className="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Privacy</a>
+          <div className="flex items-center gap-6">
+            <a
+              className="text-on-surface-variant hover:text-secondary transition-colors duration-300"
+              href="https://www.instagram.com/shaarts_calligraphy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+              </svg>
+            </a>
+            <a
+              className="text-on-surface-variant hover:text-secondary transition-colors duration-300"
+              href={CONFIG.FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+            <span className="w-px h-4 bg-primary/10"></span>
+            <Link className="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-300" to="/privacy">Privacy</Link>
           </div>
         </div>
       </footer>
