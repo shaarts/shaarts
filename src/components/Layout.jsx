@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONFIG } from '../config';
 
@@ -59,7 +59,20 @@ function SocialLinks({ className = '' }) {
 export default function Layout({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const progressRef = useRef(null);
   const location = useLocation();
+
+  // Thin gold scroll-progress bar — updated via ref to avoid re-renders.
+  useEffect(() => {
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${p})`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [location.pathname]);
 
   // Initialize Google Analytics on mount
   useEffect(() => {
@@ -154,6 +167,13 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen relative">
+      <div className="fixed top-0 left-0 right-0 h-[2px] z-50 pointer-events-none">
+        <div
+          ref={progressRef}
+          className="h-full origin-left bg-gradient-to-r from-gold/0 via-gold to-gold-glow"
+          style={{ transform: 'scaleX(0)' }}
+        />
+      </div>
       <div className="manuscript-frame" aria-hidden="true" />
 
       {/* Header */}

@@ -1,8 +1,14 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { CONFIG } from '../config';
+import { heroPaint } from '../components/heroPaintState';
 
-const HeroStroke = lazy(() => import('../components/HeroStroke'));
+const HeroEasel = lazy(() => import('../components/HeroEasel'));
+
+const smoothstep = (e0, e1, x) => {
+  const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
+  return t * t * (3 - 2 * t);
+};
 
 // The flat draw-on stroke — load fallback and reduced-motion / no-WebGL fallback.
 function SvgStroke() {
@@ -147,33 +153,92 @@ export default function Home() {
     return () => els.forEach((el) => observer.unobserve(el));
   }, []);
 
+  // Scroll parallax — hero layers move at their own depth; images drift in-frame.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const track = document.getElementById('hero-track');
+    const content = document.getElementById('hero-content');
+    const bg = document.getElementById('hero-3d-layer');
+    const cue = document.getElementById('hero-scroll-cue');
+    const items = Array.from(document.querySelectorAll('[data-parallax]'));
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+
+      // Pinned-track progress drives the painting + the hero's exit.
+      let p = 0;
+      if (track) {
+        const rect = track.getBoundingClientRect();
+        const denom = Math.max(track.offsetHeight - vh, vh);
+        p = Math.max(0, Math.min(1, -rect.top / denom));
+      } else {
+        p = Math.min(1, window.scrollY / vh);
+      }
+      heroPaint.progress = Math.min(1, p / 0.85); // finish the stroke before exit
+
+      const exit = smoothstep(0.82, 1, p); // hero releases at the end
+      if (content) {
+        content.style.transform = `translate3d(0, ${-p * 26 - exit * 60}px, 0)`;
+        content.style.opacity = String(1 - exit);
+      }
+      if (bg) bg.style.opacity = String(1 - exit * 0.96);
+      if (cue) cue.style.opacity = String(Math.max(0, 1 - smoothstep(0, 0.12, p)));
+
+      for (const el of items) {
+        const range = parseFloat(el.dataset.parallax) || 0;
+        const rect = el.getBoundingClientRect();
+        const prog = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
+        el.style.transform = `translate3d(0, ${(prog - 0.5) * range}px, 0)`;
+      }
+    };
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
   return (
     <div className="w-full overflow-x-clip">
       {/* ───────────────────────── HERO ───────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-margin-mobile pt-32 pb-24">
-        {/* the qalam writes itself — in 3D where supported, flat where not */}
-        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+      <section
+        id="hero-track"
+        className="relative"
+        style={enable3D ? { height: '240vh' } : undefined}
+      >
+        <div className={`${enable3D ? 'sticky top-0' : ''} relative h-screen w-full overflow-hidden flex items-end lg:items-center px-margin-mobile md:px-margin-desktop pt-32 pb-24`}>
+        {/* a canvas board + brush that paints as you scroll (3D where supported) */}
+        <div id="hero-3d-layer" className="pointer-events-none absolute inset-0 z-0 will-change-[opacity]" aria-hidden="true">
           {enable3D ? (
             <Suspense fallback={<SvgStroke />}>
-              <HeroStroke />
+              <HeroEasel />
             </Suspense>
           ) : (
             <SvgStroke />
           )}
         </div>
 
-        {/* Soft scrim keeps the headline crisp wherever the stroke drifts */}
+        {/* Scrim keeps the headline crisp — darker behind the text on each layout */}
         <div
-          className="pointer-events-none absolute inset-0 z-[5] bg-[radial-gradient(ellipse_52%_46%_at_50%_54%,rgba(11,13,22,0.74),transparent_72%)]"
+          className="pointer-events-none absolute inset-0 z-[5] bg-[linear-gradient(0deg,rgba(11,13,22,0.96)_28%,rgba(11,13,22,0.5)_55%,transparent_80%)] lg:bg-[linear-gradient(100deg,rgba(11,13,22,0.95)_26%,rgba(11,13,22,0.5)_52%,transparent_72%)]"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 max-w-3xl">
-          <p className="rise rise-1 font-mono text-eyebrow uppercase text-gold mb-7">
+        <div id="hero-content" className="relative z-10 max-w-xl mx-auto lg:mx-0 text-center lg:text-left will-change-transform">
+          <p className="rise rise-1 hidden lg:block font-mono text-eyebrow uppercase text-gold mb-7">
             Arabic Calligraphy · Islamic Fine Art
           </p>
 
-          <p className="rise rise-2 font-arabic text-3xl md:text-4xl text-glow-gold gold-shimmer mb-8" dir="rtl">
+          <p className="rise rise-2 hidden lg:block font-arabic text-3xl md:text-4xl text-glow-gold gold-shimmer mb-8" dir="rtl">
             بسم الله الرحمن الرحيم
           </p>
 
@@ -182,12 +247,12 @@ export default function Home() {
             of the <span className="italic text-gold-glow">script.</span>
           </h1>
 
-          <p className="rise rise-4 mx-auto mt-8 max-w-xl font-sans text-lg leading-relaxed text-parchment-dim">
+          <p className="rise rise-4 mx-auto lg:mx-0 mt-8 max-w-xl font-sans text-lg leading-relaxed text-parchment-dim">
             Quranic verses and the names of Allah, written by hand as an act of remembrance —
             beautiful reminders made to outlive the maker.
           </p>
 
-          <div className="rise rise-4 mt-11 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="rise rise-4 mt-11 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             <Link
               id="hero-view-collection"
               to="/gallery"
@@ -206,9 +271,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-parchment-dim">
-          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
+        <div id="hero-scroll-cue" className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-parchment-dim">
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em]">Scroll to paint</span>
           <span className="material-symbols-outlined text-lg animate-bounce">expand_more</span>
+        </div>
         </div>
       </section>
 
@@ -220,7 +286,14 @@ export default function Home() {
             <figure className="relative">
               <div className="absolute -inset-3 border border-gold/20 pointer-events-none" aria-hidden="true" />
               <div className="bg-parchment p-3 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9)]">
-                <img src={heroBismillah} alt="In the name of God, the Most Gracious, the Most Merciful — rendered by hand" className="w-full object-cover" />
+                <div className="overflow-hidden">
+                  <img
+                    src={heroBismillah}
+                    alt="In the name of God, the Most Gracious, the Most Merciful — rendered by hand"
+                    data-parallax="42"
+                    className="w-full object-cover scale-[1.15] will-change-transform"
+                  />
+                </div>
               </div>
               <figcaption className="mt-4 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-parchment-dim">
                 Bismillah · hand-carved reed on Ahar paper
@@ -281,12 +354,15 @@ export default function Home() {
 
           <div className="lg:col-span-5 order-1 lg:order-2 reveal-on-scroll">
             <div className="relative">
-              <div className="absolute -inset-3 border border-line pointer-events-none" aria-hidden="true" />
-              <img
-                src={aboutArtist}
-                alt="Reed pens, an ink pot and rolled scrolls on the studio table"
-                className="w-full aspect-[4/5] object-cover"
-              />
+              <div className="absolute -inset-3 border border-line pointer-events-none z-10" aria-hidden="true" />
+              <div className="overflow-hidden aspect-[4/5]">
+                <img
+                  src={aboutArtist}
+                  alt="Reed pens, an ink pot and rolled scrolls on the studio table"
+                  data-parallax="56"
+                  className="w-full h-full object-cover scale-[1.15] will-change-transform"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -347,7 +423,9 @@ export default function Home() {
               onMouseMove={handleSpotlight}
               className={`specimen reveal-on-scroll group relative overflow-hidden ${w.span}`}
             >
-              <img src={w.src} alt={w.title} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 will-change-transform" data-parallax="46">
+                <img src={w.src} alt={w.title} className="absolute -inset-[9%] w-[118%] h-[118%] object-cover" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
               <div className="absolute inset-x-0 bottom-0 z-[3] p-6 flex items-end justify-between gap-4">
                 <div>
