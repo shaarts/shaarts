@@ -1,323 +1,435 @@
-import { useEffect } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
+import { CONFIG } from '../config';
 
-// Import local image assets
-import heroBg from '../assets/artwork/hero-bg.jpg';
+const HeroStroke = lazy(() => import('../components/HeroStroke'));
+
+// The flat draw-on stroke — load fallback and reduced-motion / no-WebGL fallback.
+function SvgStroke() {
+  return (
+    <svg
+      className="qalam-stroke pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] max-w-[1200px] opacity-70"
+      viewBox="0 0 1200 220"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M40 165 C 220 55, 360 45, 520 120 S 770 215, 905 125 C 1000 65, 1110 70, 1162 122"
+        pathLength="1"
+        stroke="#EBCB6B"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <circle cx="1162" cy="122" r="5" fill="#EBCB6B" className="opacity-90" />
+    </svg>
+  );
+}
+
+function supportsWebGL() {
+  try {
+    const c = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+  } catch {
+    return false;
+  }
+}
+
+import heroBismillah from '../assets/artwork/hero-bg.jpg';
 import aboutArtist from '../assets/artwork/about-artist.png';
+import scriptThuluth from '../assets/artwork/script-thuluth.jpg';
+import scriptDiwani from '../assets/artwork/script-diwani.jpg';
+import scriptNaskh from '../assets/artwork/script-naskh.jpg';
 import pieceAyatulKursiSilver from '../assets/artwork/piece-ayatul-kursi-silver.jpg';
 import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
 import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
 import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
 import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
+import pieceGoldenBreath from '../assets/artwork/piece-golden-breath.jpg';
+import pieceManifestation from '../assets/artwork/piece-manifestation.jpg';
+import pieceGoldLeaf from '../assets/artwork/piece-gold-leaf.jpg';
+
+// Move a card's spotlight to follow the cursor
+const handleSpotlight = (e) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+};
+
+const scripts = [
+  {
+    name: 'Thuluth',
+    ar: 'ثُلُث',
+    img: scriptThuluth,
+    note: 'The monumental hand of the mosque. Tall verticals, deep curves — reserved for verse.',
+  },
+  {
+    name: 'Diwani',
+    ar: 'ديواني',
+    img: scriptDiwani,
+    note: 'The ornamental court script. Dense, interlocking, almost musical in its flourish.',
+  },
+  {
+    name: 'Naskh',
+    ar: 'نَسْخ',
+    img: scriptNaskh,
+    note: 'The clear, readable hand of the manuscript — the script the Qur’an is copied in.',
+  },
+];
+
+const works = [
+  {
+    title: 'Ayatul Kursi',
+    series: 'Throne Verse',
+    medium: 'Acrylic, Ink & Silver Leaf',
+    dimensions: '80 × 120 cm',
+    src: pieceAyatulKursiSilver,
+    span: 'lg:col-span-7 lg:row-span-2',
+  },
+  {
+    title: 'Asmaul Husna',
+    series: 'Concentric Names',
+    medium: 'Ink & Gold on Velvet',
+    dimensions: '90 × 90 cm',
+    src: pieceNamesOfAllahRed,
+    span: 'lg:col-span-5',
+  },
+  {
+    title: 'The Four Quls',
+    series: 'Square Kufic',
+    medium: 'Mixed Media, Set of 4',
+    dimensions: '50 × 50 cm',
+    src: pieceFourQuls,
+    span: 'lg:col-span-5',
+  },
+  {
+    title: 'Stained Glass Mihrab',
+    series: 'Bespoke Arch',
+    medium: 'Gold Leaf on Wood',
+    dimensions: '100 × 150 cm',
+    src: pieceStainedGlassBlue,
+    span: 'lg:col-span-7',
+  },
+  {
+    title: 'Surah Al-Fatiha',
+    series: 'Radial Medallion',
+    medium: 'Gold Ink on Wood',
+    dimensions: '80 cm ⌀',
+    src: pieceCircularRed,
+    span: 'lg:col-span-5',
+  },
+];
+
+const feed = [pieceGoldenBreath, pieceManifestation, pieceGoldLeaf];
 
 export default function Home() {
-  // Trigger Instagram embed processing
+  // Only mount the WebGL hero when it's welcome: motion allowed + WebGL present.
+  const [enable3D, setEnable3D] = useState(false);
   useEffect(() => {
-    if (window.instgrm) {
-      window.instgrm.Embeds.process();
-    } else {
-      const interval = setInterval(() => {
-        if (window.instgrm) {
-          window.instgrm.Embeds.process();
-          clearInterval(interval);
-        }
-      }, 500);
-      return () => clearInterval(interval);
-    }
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced && supportsWebGL()) setEnable3D(true);
   }, []);
 
-  // Intersection Observer for scroll-reveal logic
+  // Scroll reveal
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target); // Trigger only once
-        }
-      });
-    }, observerOptions);
-
-    const revealElements = document.querySelectorAll('.reveal-on-scroll');
-    revealElements.forEach((el) => observer.observe(el));
-
-    return () => {
-      revealElements.forEach((el) => observer.unobserve(el));
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
+    );
+    const els = document.querySelectorAll('.reveal-on-scroll');
+    els.forEach((el) => observer.observe(el));
+    return () => els.forEach((el) => observer.unobserve(el));
   }, []);
 
   return (
-    <div className="w-full">
-      {/* Hero Section */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden -mt-24">
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroBg}
-            alt="Signature Calligraphy Mural"
-            className="w-full h-full object-cover brightness-95"
-          />
-          <div className="absolute inset-0 bg-black/15"></div>
+    <div className="w-full overflow-x-clip">
+      {/* ───────────────────────── HERO ───────────────────────── */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-margin-mobile pt-32 pb-24">
+        {/* the qalam writes itself — in 3D where supported, flat where not */}
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+          {enable3D ? (
+            <Suspense fallback={<SvgStroke />}>
+              <HeroStroke />
+            </Suspense>
+          ) : (
+            <SvgStroke />
+          )}
         </div>
-        <div className="relative z-10 text-center px-margin-mobile max-w-4xl">
-          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-8 drop-shadow-lg italic">
-            The Soul of the Script
-          </h1>
-          <Link
-            id="hero-view-collection"
-            to="/gallery"
-            className="inline-block px-12 py-4 bg-primary text-white font-label-md text-label-md tracking-widest hover:bg-gold-leaf transition-colors duration-500"
-          >
-            VIEW COLLECTION
-          </Link>
-        </div>
-      </section>
 
-      {/* Artist Statement Section */}
-      <section className="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-low/30">
-        <div className="max-w-4xl mx-auto text-center reveal-on-scroll">
-          <p className="font-headline-md text-headline-md leading-relaxed text-on-surface font-light italic px-4 md:px-12">
-            "Bridging the ancient elegance of the Qalam with contemporary abstract form."
+        {/* Soft scrim keeps the headline crisp wherever the stroke drifts */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[5] bg-[radial-gradient(ellipse_52%_46%_at_50%_54%,rgba(11,13,22,0.74),transparent_72%)]"
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 max-w-3xl">
+          <p className="rise rise-1 font-mono text-eyebrow uppercase text-gold mb-7">
+            Arabic Calligraphy · Islamic Fine Art
           </p>
-          <div className="mt-12 w-16 h-px bg-primary/20 mx-auto"></div>
+
+          <p className="rise rise-2 font-arabic text-3xl md:text-4xl text-glow-gold gold-shimmer mb-8" dir="rtl">
+            بسم الله الرحمن الرحيم
+          </p>
+
+          <h1 className="rise rise-3 font-display text-display font-light text-parchment leading-[0.98]">
+            The soul<br />
+            of the <span className="italic text-gold-glow">script.</span>
+          </h1>
+
+          <p className="rise rise-4 mx-auto mt-8 max-w-xl font-sans text-lg leading-relaxed text-parchment-dim">
+            Quranic verses and the names of Allah, written by hand as an act of remembrance —
+            beautiful reminders made to outlive the maker.
+          </p>
+
+          <div className="rise rise-4 mt-11 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              id="hero-view-collection"
+              to="/gallery"
+              className="group inline-flex items-center gap-3 bg-gold px-9 py-4 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-ink hover:bg-gold-glow transition-colors duration-300"
+            >
+              View the collection
+              <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+            </Link>
+            <Link
+              id="hero-commission"
+              to="/custom-calligraphy"
+              className="inline-flex items-center gap-3 border border-line px-9 py-4 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-parchment hover:border-gold hover:text-gold transition-colors duration-300"
+            >
+              Commission a piece
+            </Link>
+          </div>
+        </div>
+
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-parchment-dim">
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em]">Scroll</span>
+          <span className="material-symbols-outlined text-lg animate-bounce">expand_more</span>
         </div>
       </section>
 
-      {/* Featured Section (About the Artist) */}
-      <section className="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
-          <div className="reveal-on-scroll">
-            <div className="aspect-[4/5] overflow-hidden border border-primary/5 p-4 bg-white/40">
+      {/* ──────────────── STATEMENT / FAITH ──────────────── */}
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+          {/* Framed Bismillah plate */}
+          <div className="lg:col-span-6 reveal-on-scroll">
+            <figure className="relative">
+              <div className="absolute -inset-3 border border-gold/20 pointer-events-none" aria-hidden="true" />
+              <div className="bg-parchment p-3 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9)]">
+                <img src={heroBismillah} alt="In the name of God, the Most Gracious, the Most Merciful — rendered by hand" className="w-full object-cover" />
+              </div>
+              <figcaption className="mt-4 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-parchment-dim">
+                Bismillah · hand-carved reed on Ahar paper
+              </figcaption>
+            </figure>
+          </div>
+
+          {/* Statement */}
+          <div className="lg:col-span-6 reveal-on-scroll">
+            <p className="font-mono text-eyebrow uppercase text-gold mb-7">The Intention</p>
+            <blockquote className="font-display text-title font-light text-parchment leading-[1.25]">
+              “When you create with the sole intention of serving Him, He puts
+              <span className="text-gold-glow italic"> barakah</span> in every brushstroke.”
+            </blockquote>
+            <div className="kashida my-9"><span className="kashida__dot" /></div>
+            <p className="font-sans text-base leading-relaxed text-parchment-dim max-w-md">
+              After a creative block that nearly ended the practice for good, the artist returned to
+              the qalam through faith. What was once only craft became <span className="text-parchment">dhikr</span> —
+              remembrance worked patiently into ink, gold and pigment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── ABOUT THE ARTIST ──────────────── */}
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+          <div className="lg:col-span-7 order-2 lg:order-1 reveal-on-scroll">
+            <p className="font-mono text-eyebrow uppercase text-gold mb-7">The Artist · شعارتس</p>
+            <h2 className="font-display text-display-sm font-light text-parchment mb-8 leading-[1.05]">
+              A reed pen,<br />a pot of ink, a purpose.
+            </h2>
+            <div className="space-y-6 max-w-xl">
+              <p className="font-sans text-lg leading-relaxed text-parchment">
+                Based in Saudi Arabia, Shaarts Calligraphy makes custom Arabic calligraphy and
+                luxury, limited-edition Islamic art — each piece composed letter by letter, then
+                gilded and finished by hand.
+              </p>
+              <p className="font-sans text-base leading-relaxed text-parchment-dim">
+                Writing the words of the Qur’an is treated as worship, not decoration. The aim is
+                simple: leave behind something beautiful and true, a reminder that keeps speaking
+                long after the studio lights go out.
+              </p>
+            </div>
+            <dl className="mt-12 grid grid-cols-3 gap-6 max-w-lg border-t border-line pt-8">
+              {[
+                ['Est.', 'Saudi Arabia'],
+                ['Practice', 'Qur’anic verse'],
+                ['Editions', 'Strictly limited'],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <dt className="font-mono text-[0.6rem] uppercase tracking-[0.22em] text-gold/70 mb-2">{k}</dt>
+                  <dd className="font-display text-lg font-light text-parchment">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="lg:col-span-5 order-1 lg:order-2 reveal-on-scroll">
+            <div className="relative">
+              <div className="absolute -inset-3 border border-line pointer-events-none" aria-hidden="true" />
               <img
                 src={aboutArtist}
-                alt="Artist at Work"
-                className="w-full h-full object-cover grayscale-[20%] transition-transform duration-700 hover:scale-105"
+                alt="Reed pens, an ink pot and rolled scrolls on the studio table"
+                className="w-full aspect-[4/5] object-cover"
               />
             </div>
-            <div className="mt-4 font-label-md text-label-md text-on-surface-variant">
-              Studio Process: Hand-carved reed pen on vintage Ahar paper.
-            </div>
-          </div>
-          <div className="reveal-on-scroll space-y-8 md:pl-16">
-            <span className="font-label-md text-label-md text-gold-leaf uppercase tracking-[0.2em]">Arabic Calligraphy Artist</span>
-            <h2 className="font-headline-lg text-headline-lg text-primary">About the Artist</h2>
-            <div className="space-y-6 max-w-md">
-              <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                Based in Saudi Arabia, Shaarts Calligraphy specializes in custom Arabic calligraphy and luxury, limited-edition Islamic art masterpieces.
-              </p>
-              <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                Following a period of severe creative block where the artist almost put down the brush forever, they rediscovered their purpose through faith. Today, writing Quranic verses and names of Allah is not just art, but an act of dhikr (remembrance) and worship—creating beautiful reminders designed to outlive the artist.
-              </p>
-              <p className="font-body-md text-body-md text-on-surface-variant italic font-light">
-                "When you create with the sole intention of serving Him — He puts barakah (blessings) in every single brushstroke."
-              </p>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Mini Gallery / Bento Grid Layout */}
-      <section className="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-          <h2 className="font-headline-lg text-headline-lg">Selected Series</h2>
-          <div className="w-1/3 h-px bg-primary/10 hidden md:block mb-6"></div>
+      {/* ──────────────── SCRIPT FAMILIES ──────────────── */}
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+        <div className="reveal-on-scroll mb-14">
+          <p className="font-mono text-eyebrow uppercase text-gold mb-5">The Hands · الخطوط</p>
+          <h2 className="font-display text-display-sm font-light text-parchment max-w-2xl leading-[1.05]">
+            Three classical scripts, each with its own voice.
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[1200px]">
-          {/* Item 1: Large Focus Item - Ayatul Kursi */}
-          <div className="md:col-span-8 md:row-span-2 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
-            <img
-              src={pieceAyatulKursiSilver}
-              alt="Ayatul Kursi (Verse of the Throne)"
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-            />
-            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <p className="font-label-md text-label-md mb-2">Throne Verse Series</p>
-              <h3 className="font-headline-md text-headline-md">Ayatul Kursi</h3>
-            </div>
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </div>
-
-          {/* Item 2: Side Item - The Four Quls */}
-          <div className="md:col-span-4 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
-            <img
-              src={pieceFourQuls}
-              alt="The Four Quls (Square Kufic Set)"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <p className="font-label-md text-label-md mb-2">Geometric Kufic</p>
-              <h3 className="font-headline-md text-headline-md">The Four Quls</h3>
-            </div>
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </div>
-
-          {/* Item 3: Side Item - Asmaul Husna */}
-          <div className="md:col-span-4 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
-            <img
-              src={pieceNamesOfAllahRed}
-              alt="Asmaul Husna (Concentric Circles)"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <p className="font-label-md text-label-md mb-2">Concentric Series</p>
-              <h3 className="font-headline-md text-headline-md">Asmaul Husna</h3>
-            </div>
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </div>
-
-          {/* Item 4: Bottom Left Item - Stained Glass Mihrab */}
-          <div className="md:col-span-8 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
-            <img
-              src={pieceStainedGlassBlue}
-              alt="Stained Glass Mihrab"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <p className="font-label-md text-label-md mb-2">Bespoke Arch Series</p>
-              <h3 className="font-headline-md text-headline-md">Stained Glass Mihrab</h3>
-            </div>
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </div>
-
-          {/* Item 5: Bottom Right Item - Surah Al-Fatiha Circular Medallion */}
-          <div className="md:col-span-4 reveal-on-scroll overflow-hidden relative group border border-primary/10 p-4">
-            <img
-              src={pieceCircularRed}
-              alt="Surah Al-Fatiha Circular Medallion"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute bottom-8 left-8 text-white z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <p className="font-label-md text-label-md mb-2">Custom Radial Series</p>
-              <h3 className="font-headline-md text-headline-md">Surah Al-Fatiha</h3>
-            </div>
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Simple Divider */}
-      <div className="w-full h-px bg-primary/10 max-w-container-max mx-auto"></div>
-
-      {/* Contact / Custom Calligraphy Teaser */}
-      <section className="py-section-gap px-margin-mobile md:px-margin-desktop text-center">
-        <div className="max-w-2xl mx-auto reveal-on-scroll">
-          <h2 className="font-headline-lg text-headline-lg mb-8">Custom Calligraphy</h2>
-          <p className="font-body-lg text-body-lg text-on-surface-variant mb-12">
-            Every piece of calligraphy is a unique conversation. We accept a limited number of custom calligraphy orders each year for collectors and institutions worldwide.
-          </p>
-          <div className="flex flex-col md:flex-row justify-center gap-6">
-            <Link
-              id="teaser-inquire-now"
-              to="/custom-calligraphy"
-              className="px-10 py-4 bg-primary text-white font-label-md text-label-md tracking-widest hover:bg-gold-leaf transition-colors duration-300"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+          {scripts.map((s) => (
+            <article
+              key={s.name}
+              onMouseMove={handleSpotlight}
+              className="specimen reveal-on-scroll group p-6 flex flex-col"
             >
-              INQUIRE NOW
+              <div className="overflow-hidden mb-6">
+                <img src={s.img} alt={`${s.name} script specimen`} className="w-full aspect-[5/4] object-cover" />
+              </div>
+              <div className="relative z-[3] flex items-baseline justify-between mb-3">
+                <h3 className="font-display text-2xl font-light text-parchment">{s.name}</h3>
+                <span className="font-arabic text-2xl text-gold" dir="rtl">{s.ar}</span>
+              </div>
+              <p className="relative z-[3] font-sans text-sm leading-relaxed text-parchment-dim">{s.note}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ──────────────── SELECTED WORKS ──────────────── */}
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+        <div className="reveal-on-scroll flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+          <div>
+            <p className="font-mono text-eyebrow uppercase text-gold mb-5">Selected Works · مختارات</p>
+            <h2 className="font-display text-display-sm font-light text-parchment leading-[1.05]">
+              Verse, gilded and framed.
+            </h2>
+          </div>
+          <Link
+            to="/gallery"
+            className="group inline-flex items-center gap-2 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-parchment-dim hover:text-gold transition-colors duration-300 whitespace-nowrap"
+          >
+            Full gallery
+            <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 auto-rows-[260px] gap-7">
+          {works.map((w) => (
+            <Link
+              key={w.title}
+              to="/gallery"
+              onMouseMove={handleSpotlight}
+              className={`specimen reveal-on-scroll group relative overflow-hidden ${w.span}`}
+            >
+              <img src={w.src} alt={w.title} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
+              <div className="absolute inset-x-0 bottom-0 z-[3] p-6 flex items-end justify-between gap-4">
+                <div>
+                  <p className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-gold mb-2">{w.series}</p>
+                  <h3 className="font-display text-xl md:text-2xl font-light text-parchment">{w.title}</h3>
+                </div>
+                <div className="text-right shrink-0 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                  <p className="font-mono text-[0.58rem] uppercase tracking-[0.15em] text-parchment-dim">{w.medium}</p>
+                  <p className="font-mono text-[0.58rem] uppercase tracking-[0.15em] text-parchment-dim">{w.dimensions}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ──────────────── COMMISSION CTA ──────────────── */}
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
+        <div className="reveal-on-scroll relative overflow-hidden border border-gold/25 bg-ink-2/60 px-8 md:px-16 py-16 md:py-24 text-center">
+          <div className="absolute -top-1/3 left-1/2 -translate-x-1/2 w-[80%] h-[120%] bg-[radial-gradient(closest-side,rgba(201,162,39,0.14),transparent)] pointer-events-none" aria-hidden="true" />
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <p className="font-arabic text-2xl text-gold/80 mb-6" dir="rtl">على البركة</p>
+            <h2 className="font-display text-display-sm font-light text-parchment mb-6 leading-[1.05]">
+              Commission a verse of your own.
+            </h2>
+            <p className="font-sans text-lg leading-relaxed text-parchment-dim mb-10">
+              A limited number of custom pieces are accepted each year for collectors and institutions
+              worldwide. Bring a verse, a name, or a story — and we’ll shape it in ink and gold.
+            </p>
+            <Link
+              id="cta-inquire"
+              to="/custom-calligraphy"
+              className="group inline-flex items-center gap-3 bg-gold px-10 py-4 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-ink hover:bg-gold-glow transition-colors duration-300"
+            >
+              Begin an inquiry
+              <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Simple Divider */}
-      <div className="w-full h-px bg-primary/10 max-w-container-max mx-auto"></div>
-
-      {/* Instagram Embed Section */}
-      <section className="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto reveal-on-scroll flex flex-col items-center">
-        <div className="text-center mb-10">
-          <span className="font-label-md text-label-md text-gold-leaf uppercase tracking-[0.2em]">Follow the Journey</span>
-          <h2 className="font-headline-lg text-headline-lg mt-2 mb-4">On Instagram</h2>
-          <a 
-            href="https://www.instagram.com/shaarts_calligraphy/" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="font-label-md text-label-md text-primary hover:text-secondary border-b border-primary hover:border-secondary transition-colors duration-300 pb-1"
+      {/* ──────────────── INSTAGRAM ──────────────── */}
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 md:pb-section-gap reveal-on-scroll">
+        <div className="kashida mb-14"><span className="kashida__dot" /></div>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <div>
+            <p className="font-mono text-eyebrow uppercase text-gold mb-4">Follow the Journey</p>
+            <a
+              href={`https://www.instagram.com/${CONFIG.INSTAGRAM_USERNAME}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-display text-3xl font-light text-parchment hover:text-gold-glow transition-colors duration-300"
+            >
+              @{CONFIG.INSTAGRAM_USERNAME}
+            </a>
+          </div>
+          <a
+            href={`https://www.instagram.com/${CONFIG.INSTAGRAM_USERNAME}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 border border-line px-7 py-3.5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-parchment hover:border-gold hover:text-gold transition-colors duration-300 self-start md:self-auto"
           >
-            @SHAARTS_CALLIGRAPHY
+            Follow on Instagram
+            <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_outward</span>
           </a>
         </div>
-        <div className="w-full flex justify-center">
-          <blockquote 
-            className="instagram-media" 
-            data-instgrm-permalink="https://www.instagram.com/shaarts_calligraphy/?utm_source=ig_embed&utm_campaign=loading" 
-            data-instgrm-version="14" 
-            style={{ 
-              background: '#FFF', 
-              border: '1px solid rgba(0, 0, 0, 0.1)', 
-              borderRadius: '0px', 
-              boxShadow: '0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)', 
-              margin: '1px', 
-              maxWidth: '658px', 
-              minWidth: '326px', 
-              padding: 0, 
-              width: 'calc(100% - 2px)' 
-            }}
-          >
-            <div style={{ padding: '16px' }}>
-              <a 
-                href="https://www.instagram.com/shaarts_calligraphy/?utm_source=ig_embed&utm_campaign=loading" 
-                style={{ 
-                  background: '#FFFFFF', 
-                  lineHeight: 0, 
-                  padding: '0 0', 
-                  textAlign: 'center', 
-                  textDecoration: 'none', 
-                  width: '100%',
-                  display: 'block'
-                }} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <div style={{ backgroundColor: '#F4F4F4', borderRadius: '50%', flexGrow: 0, height: '40px', marginRight: '14px', width: '40px' }}></div>
-                  <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center' }}>
-                    <div style={{ backgroundColor: '#F4F4F4', borderRadius: '0px', flexGrow: 0, height: '14px', marginBottom: '6px', width: '100px' }}></div>
-                    <div style={{ backgroundColor: '#F4F4F4', borderRadius: '0px', flexGrow: 0, height: '14px', width: '60px' }}></div>
-                  </div>
-                </div>
-                <div style={{ padding: '19% 0' }}></div>
-                <div style={{ display: 'block', height: '50px', margin: '0 auto 12px', width: '50px' }}>
-                  <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlnsXlink="https://www.w3.org/1999/xlink">
-                    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                      <g transform="translate(-511.000000, -20.000000)" fill="#000000">
-                        <g>
-                          <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
-                        </g>
-                      </g>
-                    </g>
-                  </svg>
-                </div>
-                <div style={{ paddingTop: '8px' }}>
-                  <div style={{ color: '#3897f0', fontFamily: 'Arial,sans-serif', fontSize: '14px', fontStyle: 'normal', fontWeight: 550, lineHeight: '18px' }}>
-                    View this profile on Instagram
-                  </div>
-                </div>
-                <div style={{ padding: '12.5% 0' }}></div>
-                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '14px', alignItems: 'center' }}>
-                  <div>
-                    <div style={{ backgroundColor: '#F4F4F4', borderRadius: '50%', height: '12.5px', width: '12.5px', transform: 'translateX(0px) translateY(7px)' }}></div>
-                    <div style={{ backgroundColor: '#F4F4F4', height: '12.5px', transform: 'rotate(-45deg) translateX(3px) translateY(1px)', width: '12.5px', flexGrow: 0, marginRight: '14px', marginLeft: '2px' }}></div>
-                    <div style={{ backgroundColor: '#F4F4F4', borderRadius: '50%', height: '12.5px', width: '12.5px', transform: 'translateX(9px) translateY(-18px)' }}></div>
-                  </div>
-                  <div style={{ marginLeft: '8px' }}>
-                    <div style={{ backgroundColor: '#F4F4F4', borderRadius: '50%', flexGrow: 0, height: '20px', width: '20px' }}></div>
-                    <div style={{ width: 0, height: 0, borderTop: '2px solid transparent', borderLeft: '6px solid #f4f4f4', borderBottom: '2px solid transparent', transform: 'translateX(16px) translateY(-4px) rotate(30deg)' }}></div>
-                  </div>
-                  <div style={{ marginLeft: 'auto' }}>
-                    <div style={{ width: '0px', borderTop: '8px solid #F4F4F4', borderRight: '8px solid transparent', transform: 'translateY(16px)' }}></div>
-                    <div style={{ backgroundColor: '#F4F4F4', flexGrow: 0, height: '12px', width: '16px', transform: 'translateY(-4px)' }}></div>
-                    <div style={{ width: 0, height: 0, borderTop: '8px solid #F4F4F4', borderLeft: '8px solid transparent', transform: 'translateY(-4px) translateX(8px)' }}></div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center', marginBottom: '24px' }}>
-                  <div style={{ backgroundColor: '#F4F4F4', borderRadius: '0px', flexGrow: 0, height: '14px', marginBottom: '6px', width: '224px' }}></div>
-                  <div style={{ backgroundColor: '#F4F4F4', borderRadius: '0px', flexGrow: 0, height: '14px', width: '144px' }}></div>
-                </div>
-              </a>
-            </div>
-          </blockquote>
+        <div className="grid grid-cols-3 gap-3 md:gap-7">
+          {feed.map((img, i) => (
+            <a
+              key={i}
+              href={`https://www.instagram.com/${CONFIG.INSTAGRAM_USERNAME}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseMove={handleSpotlight}
+              className="specimen group relative overflow-hidden aspect-square"
+            >
+              <img src={img} alt="Recent work on Instagram" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-[3]">
+                <span className="material-symbols-outlined text-gold text-3xl">photo_camera</span>
+              </div>
+            </a>
+          ))}
         </div>
       </section>
     </div>

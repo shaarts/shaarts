@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import Lightbox from '../components/Lightbox';
 
-// Import local image assets
 import pieceAyatulKursiSilver from '../assets/artwork/piece-ayatul-kursi-silver.jpg';
 import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
 import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
 import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
 import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
+
+const handleSpotlight = (e) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+};
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState('ALL');
@@ -15,86 +20,76 @@ export default function Gallery() {
 
   const artworks = [
     {
-      title: 'Ayatul Kursi (Verse of the Throne)',
+      title: 'Ayatul Kursi',
       category: 'Throne Verse Series',
       filterKey: 'CLASSICAL',
       medium: 'Acrylic, Ink & Silver Leaf on Canvas',
-      dimensions: '80x120cm',
-      description: 'A majestic rendering of the Throne Verse (Ayatul Kursi) in elegant Thuluth script, featuring a vibrant red circular centerpiece set against a textured silver-metallic background.',
+      dimensions: '80 × 120 cm',
+      description:
+        'A majestic rendering of the Throne Verse in elegant Thuluth script, with a vivid red circular centerpiece set against a textured silver-metallic ground.',
       src: pieceAyatulKursiSilver,
     },
     {
-      title: 'The Four Quls (Square Kufic Set)',
+      title: 'The Four Quls',
       category: 'Geometric Kufic',
       filterKey: 'MODERN',
-      medium: 'Mixed Media & Gold Acrylic on Canvas (Set of 4)',
-      dimensions: '50x50cm each',
-      description: 'A modern, geometric square Kufic script rendering of the Four Quls (Surah Al-Kafirun, Al-Ikhlas, Al-Falaq, and An-Nas) in red, blue, green, and charcoal canvas blocks.',
+      medium: 'Mixed Media & Gold Acrylic (Set of 4)',
+      dimensions: '50 × 50 cm each',
+      description:
+        'A modern square Kufic rendering of the Four Quls — Al-Kafirun, Al-Ikhlas, Al-Falaq and An-Nas — across red, blue, green and charcoal blocks.',
       src: pieceFourQuls,
     },
     {
-      title: 'Asmaul Husna (Concentric Circles)',
+      title: 'Asmaul Husna',
       category: 'Concentric Series',
       filterKey: 'CLASSICAL',
-      medium: 'Textured Ink & Gold Paint on Crimson Velvet Board',
-      dimensions: '90x90cm',
-      description: 'The 99 Beautiful Names of Allah meticulously written in concentric circular layers in elegant Thuluth script surrounding the central name of Allah.',
+      medium: 'Textured Ink & Gold on Crimson Velvet',
+      dimensions: '90 × 90 cm',
+      description:
+        'The ninety-nine Names of Allah written in concentric circular layers of Thuluth, ringing the central name of Allah.',
       src: pieceNamesOfAllahRed,
     },
     {
       title: 'Stained Glass Mihrab',
       category: 'Bespoke Arch Series',
       filterKey: 'CUSTOM_CALLIGRAPHY',
-      medium: 'Gold Leaf & Acrylic on Wood Arch Panel',
-      dimensions: '100x150cm',
-      description: 'A stunning bespoke arch design reminiscent of Islamic stained-glass windows, featuring intricate gold leaf floral patterns and Quranic script bordering the blue arch.',
+      medium: 'Gold Leaf & Acrylic on Wood Arch',
+      dimensions: '100 × 150 cm',
+      description:
+        'A bespoke arch echoing Islamic stained glass, with intricate gold-leaf florals and Quranic script bordering the blue mihrab.',
       src: pieceStainedGlassBlue,
     },
     {
-      title: 'Surah Al-Fatiha Circular Medallion',
+      title: 'Surah Al-Fatiha Medallion',
       category: 'Custom Radial Series',
       filterKey: 'CUSTOM_CALLIGRAPHY',
-      medium: 'Gold Ink & Acrylic Spray on Circular Wood Panel',
-      dimensions: '80cm Diameter',
-      description: 'A circular wooden masterpiece displaying Surah Al-Fatiha in a radial gold calligraphic border surrounding a red and white floral damask pattern.',
+      medium: 'Gold Ink & Acrylic on Circular Wood',
+      dimensions: '80 cm ⌀',
+      description:
+        'A circular wooden piece displaying Surah Al-Fatiha in a radial gold border around a red-and-white floral damask centre.',
       src: pieceCircularRed,
     },
   ];
 
-  // Filter artworks
   const filteredArtworks =
-    activeFilter === 'ALL'
-      ? artworks
-      : artworks.filter((art) => art.filterKey === activeFilter);
+    activeFilter === 'ALL' ? artworks : artworks.filter((art) => art.filterKey === activeFilter);
 
-  // Scroll reveal transitions
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('opacity-100', 'translate-y-0');
-          entry.target.classList.remove('opacity-0', 'translate-y-10');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    const cards = document.querySelectorAll('.art-card');
-    cards.forEach((card) => {
-      // Set initial styles for animation
-      card.classList.add('transition-all', 'duration-[1000ms]', 'opacity-0', 'translate-y-10');
-      observer.observe(card);
-    });
-
-    return () => {
-      cards.forEach((card) => observer.unobserve(card));
-    };
-  }, [activeFilter]); // Trigger animations again when filter changes!
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    const cards = document.querySelectorAll('.reveal-on-scroll');
+    cards.forEach((c) => observer.observe(c));
+    return () => cards.forEach((c) => observer.unobserve(c));
+  }, [activeFilter]);
 
   const openLightbox = (index) => {
     setLightboxIndex(index);
@@ -104,29 +99,30 @@ export default function Gallery() {
   const filters = ['ALL', 'CLASSICAL', 'MODERN', 'CUSTOM_CALLIGRAPHY'];
 
   return (
-    <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 lg:py-section-gap">
-      {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-8">
+    <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-36 pb-24 md:pb-section-gap">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-14">
         <div className="max-w-2xl">
-          <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-4">
-            Selected Works
+          <p className="font-mono text-eyebrow uppercase text-gold mb-6">The Collection · المعرض</p>
+          <h1 className="font-display text-display-sm font-light text-parchment leading-[1.02] mb-6">
+            Selected works
           </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-            A curated selection of Arabic calligraphy explorations, spanning the rigidity of classical scripts to the fluid freedom of contemporary abstract art.
+          <p className="font-sans text-lg leading-relaxed text-parchment-dim">
+            A curated set of explorations — from the rigour of classical scripts to the freedom of
+            contemporary abstraction. Select any piece to view it full-frame.
           </p>
         </div>
 
-        {/* Discreet Filter System */}
-        <div className="flex flex-wrap gap-8 items-center border-b border-primary/10 pb-2">
+        <div className="flex flex-wrap gap-x-7 gap-y-3 lg:justify-end">
           {filters.map((filter) => (
             <button
               key={filter}
               id={`filter-btn-${filter.toLowerCase()}`}
               onClick={() => setActiveFilter(filter)}
-              className={`font-label-md text-label-md tracking-widest pb-1 transition-all duration-300 focus:outline-none ${
+              className={`font-mono text-[0.7rem] uppercase tracking-[0.2em] pb-1.5 border-b transition-colors duration-300 ${
                 activeFilter === filter
-                  ? 'text-secondary border-b-2 border-secondary'
-                  : 'text-on-surface-variant hover:text-secondary'
+                  ? 'text-gold border-gold'
+                  : 'text-parchment-dim border-transparent hover:text-parchment'
               }`}
             >
               {filter.replace('_', ' ')}
@@ -135,44 +131,43 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Asymmetrical Masonry Grid */}
-      <div className="masonry-grid" id="masonry-grid">
+      <div className="kashida mb-14"><span className="kashida__dot" /></div>
+
+      {/* Masonry of specimens */}
+      <div className="masonry-grid">
         {filteredArtworks.map((artwork, index) => (
           <div
             key={artwork.title}
             onClick={() => openLightbox(index)}
-            className="masonry-item art-card group cursor-pointer relative overflow-hidden bg-surface-container-low border border-primary/5"
+            onMouseMove={handleSpotlight}
+            className="masonry-item specimen reveal-on-scroll group cursor-pointer relative"
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
                 openLightbox(index);
               }
             }}
           >
             <div className="relative overflow-hidden">
-              <img
-                src={artwork.src}
-                alt={artwork.title}
-                className="w-full h-auto transition-transform duration-[800ms] ease-out"
-              />
-              <div className="art-hover-overlay absolute inset-0 bg-primary/20 backdrop-blur-[2px] flex flex-col justify-end p-8">
-                <span className="font-label-md text-label-md text-surface uppercase tracking-widest mb-2">
-                  {artwork.category}
-                </span>
-                <h3 className="font-headline-md text-headline-md text-surface">
-                  {artwork.title}
-                </h3>
-                <p className="font-label-md text-label-md text-surface/80 mt-4">
-                  {artwork.medium}, {artwork.dimensions}
+              <img src={artwork.src} alt={artwork.title} className="w-full h-auto block" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-x-0 bottom-0 z-[3] p-6 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.22em] text-gold mb-2">{artwork.category}</p>
+                <h3 className="font-display text-2xl font-light text-parchment mb-2">{artwork.title}</h3>
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-parchment-dim">
+                  {artwork.medium} · {artwork.dimensions}
                 </p>
               </div>
+              <span className="absolute top-4 right-4 z-[3] flex items-center justify-center w-9 h-9 bg-ink/70 backdrop-blur-sm border border-line text-parchment opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <span className="material-symbols-outlined text-lg">open_in_full</span>
+              </span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Dynamic Immersive Lightbox */}
       <Lightbox
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}

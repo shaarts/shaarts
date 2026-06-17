@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import commissionShowcase from '../assets/artwork/commission-showcase.png';
 
-export default function CustomCalligraphy() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    size: '',
-    description: '',
-  });
+const steps = [
+  ['Share', 'Tell us the verse, the space and the story behind it.'],
+  ['Sketch', 'We return a composition and quote for your approval.'],
+  ['Write', 'The piece is lettered, gilded and finished by hand.'],
+];
 
-  const [formStatus, setFormStatus] = useState('IDLE'); // IDLE, SENDING, SUCCESS, ERROR
+export default function CustomCalligraphy() {
+  const [formData, setFormData] = useState({ name: '', email: '', size: '', description: '' });
+  const [formStatus, setFormStatus] = useState('IDLE'); // IDLE | SENDING | SUCCESS | ERROR
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -22,110 +22,103 @@ export default function CustomCalligraphy() {
       setFormStatus('ERROR');
       return;
     }
-
     setFormStatus('SENDING');
-
-    // Simulate network request before success feedback
     setTimeout(() => {
       setFormStatus('SUCCESS');
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        size: '',
-        description: '',
-      });
+      setFormData({ name: '', email: '', size: '', description: '' });
     }, 1200);
   };
 
+  const fieldClass =
+    'bg-transparent border-b border-line focus:border-gold py-2.5 font-sans text-base text-parchment placeholder:text-parchment-dim/50 transition-colors duration-300';
+  const labelClass =
+    'font-mono text-[0.62rem] uppercase tracking-[0.22em] text-parchment-dim group-focus-within:text-gold transition-colors duration-300';
+
   return (
-    <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-16 pb-section-gap">
-      {/* Header Section */}
-      <div className="mb-24 max-w-3xl">
-        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">
-          Custom Calligraphy
+    <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-36 pb-24 md:pb-section-gap">
+      {/* Header */}
+      <div className="max-w-3xl mb-16">
+        <p className="font-mono text-eyebrow uppercase text-gold mb-6">Commission · الطلبات</p>
+        <h1 className="font-display text-display-sm font-light text-parchment leading-[1.02] mb-6">
+          Custom calligraphy
         </h1>
-        <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-          Collaborate on a unique piece of art tailored to your space and story. Each stroke is a deliberate meditation. You can inquire by submitting the form below, or reach out directly via Instagram Direct Message (DM) to initiate your project.
+        <p className="font-sans text-lg leading-relaxed text-parchment-dim">
+          Collaborate on a piece tailored to your space and story. Send the details below, or reach
+          out on Instagram to begin. A limited number of commissions are accepted each year.
         </p>
       </div>
 
-      {/* Main Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
-        {/* Image Side */}
-        <div className="md:col-span-5 order-2 md:order-1">
-          <div className="relative group overflow-hidden border border-primary/5">
+      {/* Process steps */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-line border border-line mb-16">
+        {steps.map(([title, body], i) => (
+          <div key={title} className="bg-ink-2/60 p-7">
+            <span className="font-mono text-[0.7rem] text-gold/70" dir="rtl">{['أولاً', 'ثانياً', 'ثالثاً'][i]}</span>
+            <h3 className="font-display text-xl font-light text-parchment mt-3 mb-2">{title}</h3>
+            <p className="font-sans text-sm leading-relaxed text-parchment-dim">{body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        {/* Recent project */}
+        <div className="lg:col-span-5 order-2 lg:order-1">
+          <div className="relative">
+            <div className="absolute -inset-3 border border-line pointer-events-none" aria-hidden="true" />
             <img
               src={commissionShowcase}
-              alt="Finished Calligraphy Piece"
-              className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700 ease-in-out transform group-hover:scale-[1.02]"
+              alt="A finished commissioned calligraphy piece"
+              className="w-full object-cover"
             />
           </div>
-          <div className="mt-6 flex flex-col gap-2">
-            <span className="font-label-md text-label-md text-secondary uppercase tracking-widest">
-              Recent Project
-            </span>
-            <p className="font-label-md text-label-md text-on-surface-variant">
-              Surah Al-Ikhlas, Traditional Thuluth Script. Ink on Ahar Paper. 120cm x 80cm.
+          <div className="mt-6">
+            <p className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-gold mb-2">Recent Project</p>
+            <p className="font-sans text-sm leading-relaxed text-parchment-dim">
+              Surah Al-Ikhlas · Traditional Thuluth · Ink on Ahar paper · 120 × 80 cm.
             </p>
           </div>
         </div>
 
-        {/* Form Side */}
-        <div className="md:col-span-7 order-1 md:order-2 bg-surface-container-low p-8 md:p-12">
+        {/* Form */}
+        <div className="lg:col-span-7 order-1 lg:order-2 bg-ink-2/60 border border-line p-7 md:p-12">
           {formStatus === 'SUCCESS' ? (
             <div className="flex flex-col items-center justify-center text-center py-20 space-y-6">
-              <span className="material-symbols-outlined text-secondary text-6xl animate-pulse">
-                check_circle
-              </span>
-              <h3 className="font-headline-md text-headline-md text-primary">Inquiry Received</h3>
-              <p className="font-body-md text-on-surface-variant max-w-sm">
-                Thank you for sharing your project details. We will review your inquiry and get back to you within 2-3 business days.
+              <span className="material-symbols-outlined text-gold text-6xl">check_circle</span>
+              <h3 className="font-display text-2xl font-light text-parchment">Inquiry received</h3>
+              <p className="font-sans text-base text-parchment-dim max-w-sm leading-relaxed">
+                Thank you for sharing your project. We’ll review the details and reply within
+                2–3 business days.
               </p>
               <button
                 onClick={() => setFormStatus('IDLE')}
-                className="mt-4 px-8 py-3 border border-primary text-primary font-label-md text-label-md uppercase tracking-widest hover:bg-primary hover:text-white transition-colors duration-300"
+                className="mt-2 border border-line px-8 py-3 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-parchment hover:border-gold hover:text-gold transition-colors duration-300"
               >
-                Send Another Inquiry
+                Send another inquiry
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-10" id="customCalligraphyForm">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Name field */}
+            <form onSubmit={handleSubmit} className="flex flex-col gap-9" id="customCalligraphyForm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-9">
                 <div className="flex flex-col gap-2 group">
-                  <label
-                    className="font-label-md text-label-md text-primary group-focus-within:text-secondary transition-colors duration-300"
-                    htmlFor="name"
-                  >
-                    Name
-                  </label>
+                  <label className={labelClass} htmlFor="name">Name</label>
                   <input
-                    className="bg-transparent border-b border-primary/15 focus:border-secondary focus:outline-none py-2 font-body-md text-body-md transition-colors duration-300"
+                    className={fieldClass}
                     id="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="E.g. Mohammed Irshad"
+                    placeholder="Your full name"
                     type="text"
                     disabled={formStatus === 'SENDING'}
                     required
                   />
                 </div>
-                {/* Email field */}
                 <div className="flex flex-col gap-2 group">
-                  <label
-                    className="font-label-md text-label-md text-primary group-focus-within:text-secondary transition-colors duration-300"
-                    htmlFor="email"
-                  >
-                    Email
-                  </label>
+                  <label className={labelClass} htmlFor="email">Email</label>
                   <input
-                    className="bg-transparent border-b border-primary/15 focus:border-secondary focus:outline-none py-2 font-body-md text-body-md transition-colors duration-300"
+                    className={fieldClass}
                     id="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="alex@studio.com"
+                    placeholder="you@email.com"
                     type="email"
                     disabled={formStatus === 'SENDING'}
                     required
@@ -133,70 +126,55 @@ export default function CustomCalligraphy() {
                 </div>
               </div>
 
-              {/* Size/Medium field */}
               <div className="flex flex-col gap-2 group">
-                <label
-                  className="font-label-md text-label-md text-primary group-focus-within:text-secondary transition-colors duration-300"
-                  htmlFor="size"
-                >
-                  Size/Medium
-                </label>
+                <label className={labelClass} htmlFor="size">Size / Medium</label>
                 <input
-                  className="bg-transparent border-b border-primary/15 focus:border-secondary focus:outline-none py-2 font-body-md text-body-md transition-colors duration-300"
+                  className={fieldClass}
                   id="size"
                   value={formData.size}
                   onChange={handleChange}
-                  placeholder="E.g. 100x100cm, Canvas"
+                  placeholder="e.g. 100 × 100 cm, canvas"
                   type="text"
                   disabled={formStatus === 'SENDING'}
                 />
               </div>
 
-              {/* Project Description field */}
               <div className="flex flex-col gap-2 group">
-                <label
-                  className="font-label-md text-label-md text-primary group-focus-within:text-secondary transition-colors duration-300"
-                  htmlFor="description"
-                >
-                  Project Description
-                </label>
+                <label className={labelClass} htmlFor="description">Project description</label>
                 <textarea
-                  className="bg-transparent border-b border-primary/15 focus:border-secondary focus:outline-none py-2 font-body-md text-body-md resize-none transition-colors duration-300"
+                  className={`${fieldClass} resize-none`}
                   id="description"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Tell us about the story or the space this piece is intended for..."
+                  placeholder="The verse, the space, the story this piece is meant for…"
                   rows="4"
                   disabled={formStatus === 'SENDING'}
-                ></textarea>
+                />
               </div>
 
               {formStatus === 'ERROR' && (
-                <p className="text-error font-body-md text-sm">
-                  Please fill in all required fields.
-                </p>
+                <p className="font-sans text-sm text-cinnabar">Please add your name and email so we can reply.</p>
               )}
 
-              {/* Submit panel */}
-              <div className="mt-4 flex flex-col md:flex-row items-center gap-6">
+              <div className="flex flex-col md:flex-row md:items-center gap-5 pt-1">
                 <button
-                  className="w-full md:w-auto px-12 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest hover:bg-secondary transition-colors duration-300 disabled:opacity-50"
+                  className="group inline-flex items-center justify-center gap-3 bg-gold px-10 py-4 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-ink hover:bg-gold-glow transition-colors duration-300 disabled:opacity-50"
                   type="submit"
                   disabled={formStatus === 'SENDING'}
                 >
-                  {formStatus === 'SENDING' ? 'Sending...' : 'Submit Inquiry'}
+                  {formStatus === 'SENDING' ? 'Sending…' : 'Submit inquiry'}
+                  {formStatus !== 'SENDING' && (
+                    <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                  )}
                 </button>
-                <p className="font-label-md text-label-md text-on-surface-variant opacity-70 italic text-center md:text-left">
-                  Response time typically 2-3 business days.
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-parchment-dim">
+                  Reply within 2–3 business days
                 </p>
               </div>
             </form>
           )}
         </div>
       </div>
-
-      {/* Subtle Divider */}
-      <hr className="mt-section-gap border-t border-primary/10" />
     </div>
   );
 }
