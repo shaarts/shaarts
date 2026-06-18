@@ -39,11 +39,11 @@ import aboutArtist from '../assets/artwork/about-artist.png';
 import scriptThuluth from '../assets/artwork/script-thuluth.jpg';
 import scriptDiwani from '../assets/artwork/script-diwani.jpg';
 import scriptNaskh from '../assets/artwork/script-naskh.jpg';
-import pieceAyatulKursiSilver from '../assets/artwork/piece-ayatul-kursi-silver.jpg';
-import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
-import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
-import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
-import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
+import artAyatulKursiGold from '../assets/artwork/art-ayatul-kursi-gold.jpg';
+import artAsmaulHusnaWheel from '../assets/artwork/art-asmaul-husna-wheel.jpg';
+import artAsmaulHusnaMosaic from '../assets/artwork/art-asmaul-husna-mosaic.jpg';
+import artMihrabOfLight from '../assets/artwork/art-mihrab-of-light.jpg';
+import artAllahAzure from '../assets/artwork/art-allah-azure.jpg';
 import pieceGoldenBreath from '../assets/artwork/piece-golden-breath.jpg';
 import pieceManifestation from '../assets/artwork/piece-manifestation.jpg';
 import pieceGoldLeaf from '../assets/artwork/piece-gold-leaf.jpg';
@@ -80,41 +80,41 @@ const works = [
   {
     title: 'Ayatul Kursi',
     series: 'Throne Verse',
-    medium: 'Acrylic, Ink & Silver Leaf',
+    medium: 'Gold Leaf & Ink on Black Canvas',
     dimensions: '80 × 120 cm',
-    src: pieceAyatulKursiSilver,
+    src: artAyatulKursiGold,
     span: 'lg:col-span-7 lg:row-span-2',
   },
   {
     title: 'Asmaul Husna',
-    series: 'Concentric Names',
-    medium: 'Ink & Gold on Velvet',
+    series: 'Radial Kufic',
+    medium: 'Ink & Acrylic on Canvas',
     dimensions: '90 × 90 cm',
-    src: pieceNamesOfAllahRed,
+    src: artAsmaulHusnaWheel,
     span: 'lg:col-span-5',
   },
   {
-    title: 'The Four Quls',
-    series: 'Square Kufic',
-    medium: 'Mixed Media, Set of 4',
-    dimensions: '50 × 50 cm',
-    src: pieceFourQuls,
+    title: 'The Ninety-Nine',
+    series: 'Mosaic Names',
+    medium: 'Acrylic & Gold on Canvas',
+    dimensions: '100 × 100 cm',
+    src: artAsmaulHusnaMosaic,
     span: 'lg:col-span-5',
   },
   {
-    title: 'Stained Glass Mihrab',
-    series: 'Bespoke Arch',
-    medium: 'Gold Leaf on Wood',
+    title: 'Mihrab of Light',
+    series: 'Bespoke Panel',
+    medium: 'Gold Leaf & Acrylic on Canvas',
     dimensions: '100 × 150 cm',
-    src: pieceStainedGlassBlue,
+    src: artMihrabOfLight,
     span: 'lg:col-span-7',
   },
   {
-    title: 'Surah Al-Fatiha',
-    series: 'Radial Medallion',
-    medium: 'Gold Ink on Wood',
-    dimensions: '80 cm ⌀',
-    src: pieceCircularRed,
+    title: 'Allah',
+    series: 'The Divine Name',
+    medium: 'Acrylic & Ink on Canvas',
+    dimensions: '70 × 90 cm',
+    src: artAllahAzure,
     span: 'lg:col-span-5',
   },
 ];

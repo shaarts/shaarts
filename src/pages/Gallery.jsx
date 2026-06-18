@@ -1,11 +1,18 @@
 import { useState, useEffect } from 'react';
 import Lightbox from '../components/Lightbox';
 
-import pieceAyatulKursiSilver from '../assets/artwork/piece-ayatul-kursi-silver.jpg';
-import pieceFourQuls from '../assets/artwork/piece-four-quls.jpg';
-import pieceNamesOfAllahRed from '../assets/artwork/piece-names-of-allah-red.jpg';
-import pieceStainedGlassBlue from '../assets/artwork/piece-stained-glass-blue.jpg';
-import pieceCircularRed from '../assets/artwork/piece-circular-red.jpg';
+import artAyatulKursiGold from '../assets/artwork/art-ayatul-kursi-gold.jpg';
+import artAllahAzure from '../assets/artwork/art-allah-azure.jpg';
+import artAyatulKursiRoundel from '../assets/artwork/art-ayatul-kursi-roundel.jpg';
+import artAsmaulHusnaMosaic from '../assets/artwork/art-asmaul-husna-mosaic.jpg';
+import artAsmaulHusnaWheel from '../assets/artwork/art-asmaul-husna-wheel.jpg';
+import artMuhammadGold from '../assets/artwork/art-muhammad-gold.jpg';
+import artCarvedVerse from '../assets/artwork/art-carved-verse.jpg';
+import artAlAqsa from '../assets/artwork/art-al-aqsa.jpg';
+import artDomeOfTheRock from '../assets/artwork/art-dome-of-the-rock.jpg';
+import artMihrabOfLight from '../assets/artwork/art-mihrab-of-light.jpg';
+import artNamesMandala from '../assets/artwork/art-names-mandala.jpg';
+import artThronePanel from '../assets/artwork/art-throne-panel.jpg';
 
 const handleSpotlight = (e) => {
   const r = e.currentTarget.getBoundingClientRect();
@@ -23,51 +30,121 @@ export default function Gallery() {
       title: 'Ayatul Kursi',
       category: 'Throne Verse Series',
       filterKey: 'CLASSICAL',
-      medium: 'Acrylic, Ink & Silver Leaf on Canvas',
+      medium: 'Gold Leaf & Ink on Black Canvas',
       dimensions: '80 × 120 cm',
       description:
-        'A majestic rendering of the Throne Verse in elegant Thuluth script, with a vivid red circular centerpiece set against a textured silver-metallic ground.',
-      src: pieceAyatulKursiSilver,
+        'The Throne Verse rendered in flowing gold Thuluth on a deep black ground — light drawn out of darkness, letter by letter.',
+      src: artAyatulKursiGold,
     },
     {
-      title: 'The Four Quls',
-      category: 'Geometric Kufic',
-      filterKey: 'MODERN',
-      medium: 'Mixed Media & Gold Acrylic (Set of 4)',
-      dimensions: '50 × 50 cm each',
+      title: 'Allah',
+      category: 'The Divine Name',
+      filterKey: 'CLASSICAL',
+      medium: 'Acrylic & Ink on Canvas',
+      dimensions: '70 × 90 cm',
       description:
-        'A modern square Kufic rendering of the Four Quls — Al-Kafirun, Al-Ikhlas, Al-Falaq and An-Nas — across red, blue, green and charcoal blocks.',
-      src: pieceFourQuls,
+        'The name of Allah set in luminous Thuluth above a sky-washed field, framed in dark wood.',
+      src: artAllahAzure,
     },
     {
-      title: 'Asmaul Husna',
+      title: 'Ayatul Kursi Roundel',
       category: 'Concentric Series',
       filterKey: 'CLASSICAL',
-      medium: 'Textured Ink & Gold on Crimson Velvet',
-      dimensions: '90 × 90 cm',
+      medium: 'Ink & Silver on Circular Canvas',
+      dimensions: '90 cm ⌀',
       description:
-        'The ninety-nine Names of Allah written in concentric circular layers of Thuluth, ringing the central name of Allah.',
-      src: pieceNamesOfAllahRed,
+        'The Throne Verse spiralling inward through concentric rings of script around a central medallion, set on a turquoise disc.',
+      src: artAyatulKursiRoundel,
     },
     {
-      title: 'Stained Glass Mihrab',
-      category: 'Bespoke Arch Series',
-      filterKey: 'CUSTOM_CALLIGRAPHY',
-      medium: 'Gold Leaf & Acrylic on Wood Arch',
+      title: 'The Ninety-Nine',
+      category: 'Mosaic Names',
+      filterKey: 'MODERN',
+      medium: 'Acrylic & Gold on Canvas',
+      dimensions: '100 × 100 cm',
+      description:
+        'The ninety-nine Names of Allah held in a grid of jewel-toned discs — a mosaic of remembrance against gold.',
+      src: artAsmaulHusnaMosaic,
+    },
+    {
+      title: 'Asmaul Husna Wheel',
+      category: 'Radial Kufic',
+      filterKey: 'MODERN',
+      medium: 'Ink & Acrylic on Canvas',
       dimensions: '100 × 150 cm',
       description:
-        'A bespoke arch echoing Islamic stained glass, with intricate gold-leaf florals and Quranic script bordering the blue mihrab.',
-      src: pieceStainedGlassBlue,
+        'The Names radiating from a central rose in interlocking Kufic, woven into a geometric wheel of crimson and gold.',
+      src: artAsmaulHusnaWheel,
     },
     {
-      title: 'Surah Al-Fatiha Medallion',
-      category: 'Custom Radial Series',
-      filterKey: 'CUSTOM_CALLIGRAPHY',
-      medium: 'Gold Ink & Acrylic on Circular Wood',
-      dimensions: '80 cm ⌀',
+      title: 'Muhammad ﷺ',
+      category: 'The Blessed Name',
+      filterKey: 'CLASSICAL',
+      medium: 'Gold Acrylic & Ink on Canvas',
+      dimensions: '70 × 90 cm',
       description:
-        'A circular wooden piece displaying Surah Al-Fatiha in a radial gold border around a red-and-white floral damask centre.',
-      src: pieceCircularRed,
+        'The blessed name of the Prophet ﷺ in gilded Thuluth, rising over a soft wash of sky.',
+      src: artMuhammadGold,
+    },
+    {
+      title: 'Carved Verse',
+      category: 'Relief Series',
+      filterKey: 'CUSTOM_CALLIGRAPHY',
+      medium: 'Raised Gold Script on Black Panel',
+      dimensions: '60 × 100 cm',
+      description:
+        'A teardrop panel of Quranic verse built up in raised gold lettering, catching the light like carved relief.',
+      src: artCarvedVerse,
+    },
+    {
+      title: 'Al-Aqsa',
+      category: 'Sanctuary Series',
+      filterKey: 'CUSTOM_CALLIGRAPHY',
+      medium: 'Acrylic on Canvas, Framed',
+      dimensions: '60 × 80 cm',
+      description:
+        'The golden dome of the noble sanctuary at dawn, painted in warm light and framed for a quiet wall.',
+      src: artAlAqsa,
+    },
+    {
+      title: 'Qubbat as-Sakhra',
+      category: 'Sanctuary Series',
+      filterKey: 'CUSTOM_CALLIGRAPHY',
+      medium: 'Acrylic on Canvas',
+      dimensions: '80 × 120 cm',
+      description:
+        'The Dome of the Rock rendered in gold and stone, its arches and tilework carried in patient detail.',
+      src: artDomeOfTheRock,
+    },
+    {
+      title: 'Mihrab of Light',
+      category: 'Bespoke Panel',
+      filterKey: 'CUSTOM_CALLIGRAPHY',
+      medium: 'Gold Leaf & Acrylic on Canvas',
+      dimensions: '100 × 150 cm',
+      description:
+        'A towering panel of Quranic script in gold over deep lapis — a niche of light to anchor a room.',
+      src: artMihrabOfLight,
+    },
+    {
+      title: 'Names in Colour',
+      category: 'Radial Kufic',
+      filterKey: 'MODERN',
+      medium: 'Mixed Media on Canvas',
+      dimensions: '90 cm ⌀',
+      description:
+        'A circular mandala of the Names in interlocking colour, geometry and script turning together as one wheel.',
+      src: artNamesMandala,
+    },
+    {
+      title: 'Throne Verse Panel',
+      category: 'Throne Verse Series',
+      filterKey: 'CLASSICAL',
+      medium: 'Gold Leaf & Ink on Black Canvas',
+      dimensions: '60 × 120 cm',
+      description:
+        'A tall column of the Throne Verse in gold Thuluth on black — a vertical reading of the same eternal words.',
+      src: artThronePanel,
     },
   ];
 
