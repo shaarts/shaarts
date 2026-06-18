@@ -184,13 +184,15 @@ export default function Layout({ children }) {
                 {link.name}
               </Link>
             ))}
-            <Link
+            <a
               id="nav-inquire"
-              to="/custom-calligraphy"
+              href={CONFIG.INSTAGRAM_DM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-ink bg-gold px-4 py-2 hover:bg-gold-glow transition-colors duration-300"
             >
               Inquire
-            </Link>
+            </a>
           </div>
 
           <button

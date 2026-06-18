@@ -36,9 +36,9 @@ function supportsWebGL() {
 
 import heroBismillah from '../assets/artwork/hero-bg.jpg';
 import aboutArtist from '../assets/artwork/about-artist.png';
-import scriptThuluth from '../assets/artwork/script-thuluth.jpg';
-import scriptDiwani from '../assets/artwork/script-diwani.jpg';
-import scriptNaskh from '../assets/artwork/script-naskh.jpg';
+import artThronePanel from '../assets/artwork/art-throne-panel.jpg';
+import artNamesMandala from '../assets/artwork/art-names-mandala.jpg';
+import artDomeOfTheRock from '../assets/artwork/art-dome-of-the-rock.jpg';
 import artAyatulKursiGold from '../assets/artwork/art-ayatul-kursi-gold.jpg';
 import artAsmaulHusnaWheel from '../assets/artwork/art-asmaul-husna-wheel.jpg';
 import artAsmaulHusnaMosaic from '../assets/artwork/art-asmaul-husna-mosaic.jpg';
@@ -55,24 +55,24 @@ const handleSpotlight = (e) => {
   e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
 };
 
-const scripts = [
+const series = [
   {
-    name: 'Thuluth',
-    ar: 'ثُلُث',
-    img: scriptThuluth,
-    note: 'The monumental hand of the mosque. Tall verticals, deep curves — reserved for verse.',
+    name: 'The Throne Verse',
+    ar: 'آية الكرسي',
+    img: artThronePanel,
+    note: 'Ayatul Kursi, returned to again and again — the verse of the Throne drawn out in gold on a deep black ground.',
   },
   {
-    name: 'Diwani',
-    ar: 'ديواني',
-    img: scriptDiwani,
-    note: 'The ornamental court script. Dense, interlocking, almost musical in its flourish.',
+    name: 'The Divine Names',
+    ar: 'أسماء الله الحسنى',
+    img: artNamesMandala,
+    note: 'The ninety-nine Names set in radial Kufic and mosaic — remembrance arranged as geometry, colour and light.',
   },
   {
-    name: 'Naskh',
-    ar: 'نَسْخ',
-    img: scriptNaskh,
-    note: 'The clear, readable hand of the manuscript — the script the Qur’an is copied in.',
+    name: 'Sanctuaries',
+    ar: 'المساجد',
+    img: artDomeOfTheRock,
+    note: 'The domes of the noble sanctuaries — Al-Aqsa and the Dome of the Rock — carried in gold, stone and patient light.',
   },
 ];
 
@@ -292,17 +292,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──────────────── SCRIPT FAMILIES ──────────────── */}
+      {/* ──────────────── SERIES / THE WORK ──────────────── */}
       <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
         <div className="reveal-on-scroll mb-14">
-          <p className="font-mono text-eyebrow uppercase text-gold mb-5">The Hands · الخطوط</p>
+          <p className="font-mono text-eyebrow uppercase text-gold mb-5">The Work · الأعمال</p>
           <h2 className="font-display text-display-sm font-light text-parchment max-w-2xl leading-[1.05]">
-            Three classical scripts, each with its own voice.
+            What the studio returns to.
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {scripts.map((s) => (
+          {series.map((s) => (
             <article
               key={s.name}
               onMouseMove={handleSpotlight}
@@ -377,14 +377,16 @@ export default function Home() {
               A limited number of custom pieces are accepted each year for collectors and institutions
               worldwide. Bring a verse, a name, or a story — and we’ll shape it in ink and gold.
             </p>
-            <Link
+            <a
               id="cta-inquire"
-              to="/custom-calligraphy"
+              href={CONFIG.INSTAGRAM_DM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-3 bg-gold px-10 py-4 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-ink hover:bg-gold-glow transition-colors duration-300"
             >
               Begin an inquiry
               <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
