@@ -1,115 +1,148 @@
 import { CONFIG } from '../config';
 
+const sections = [
+  {
+    id: 'information-collection',
+    title: 'Information We Collect',
+    body: (
+      <>
+        <p className="font-sans text-base leading-relaxed text-parchment-dim">
+          We collect personal information you voluntarily provide when inquiring about a custom
+          calligraphy or commission project, including:
+        </p>
+        <ul className="list-none space-y-2 font-sans text-base leading-relaxed text-parchment-dim">
+          <li><span className="text-parchment">Contact information</span> — your name and email address.</li>
+          <li><span className="text-parchment">Project specifications</span> — dimensions, medium, script styles and descriptions you supply.</li>
+          <li><span className="text-parchment">Interaction details</span> — messages and context shared during the commission process.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'information-use',
+    title: 'How We Use Your Information',
+    body: (
+      <>
+        <p className="font-sans text-base leading-relaxed text-parchment-dim">
+          Your information is used solely to deliver bespoke artwork services:
+        </p>
+        <ul className="list-none space-y-2 font-sans text-base leading-relaxed text-parchment-dim">
+          <li>Reviewing and responding to your commission proposals.</li>
+          <li>Communicating project updates, revisions and billing milestones.</li>
+          <li>Analysing site performance to refine navigation and experience.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'information-sharing',
+    title: 'Information Sharing',
+    body: (
+      <p className="font-sans text-base leading-relaxed text-parchment-dim">
+        We never sell, rent, lease or trade your personal information. We share it only with trusted
+        services necessary to operate the site or complete a transaction, and only where those
+        parties agree to keep it confidential.
+      </p>
+    ),
+  },
+  {
+    id: 'analytics-cookies',
+    title: 'Cookies & Analytics',
+    body: (
+      <p className="font-sans text-base leading-relaxed text-parchment-dim">
+        We use standard cookies and Google Analytics to understand how visitors use the site. This
+        compiles anonymous traffic reports — pages visited, region, referral source — to help us
+        improve. You can disable cookies in your browser without losing access to the site.
+      </p>
+    ),
+  },
+  {
+    id: 'data-security',
+    title: 'Data Security',
+    body: (
+      <p className="font-sans text-base leading-relaxed text-parchment-dim">
+        We use security measures including SSL encryption to protect your form details. No internet
+        transmission is ever completely secure, so while we take extensive precautions we cannot
+        guarantee absolute security.
+      </p>
+    ),
+  },
+  {
+    id: 'your-rights',
+    title: 'Your Legal Rights',
+    body: (
+      <p className="font-sans text-base leading-relaxed text-parchment-dim">
+        Depending on your location, you may request access to, correction of, or deletion of the
+        personal information we hold. To request deletion of inquiry records, contact us using the
+        address below.
+      </p>
+    ),
+  },
+  {
+    id: 'contact-us',
+    title: 'Contact Information',
+    body: (
+      <>
+        <p className="font-sans text-base leading-relaxed text-parchment-dim">
+          For questions about this policy, or to request data updates or deletion, reach us at:
+        </p>
+        <a
+          href={`mailto:${CONFIG.EMAIL}`}
+          className="inline-flex items-center gap-3 mt-2 bg-gold px-8 py-3.5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink hover:bg-gold-glow transition-colors duration-300"
+        >
+          Email us · {CONFIG.EMAIL}
+        </a>
+      </>
+    ),
+  },
+];
+
 export default function Privacy() {
   return (
-    <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-16 pb-section-gap">
-      {/* Header Section */}
-      <div className="mb-16 max-w-3xl">
-        <span className="font-label-md text-label-md text-secondary uppercase tracking-widest mb-3 block">
-          Legal
-        </span>
-        <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">
-          Privacy Policy
+    <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-36 pb-24 md:pb-section-gap">
+      <div className="max-w-3xl mb-14">
+        <p className="font-mono text-eyebrow uppercase text-gold mb-6">Legal</p>
+        <h1 className="font-display text-display-sm font-light text-parchment leading-[1.02] mb-6">
+          Privacy policy
         </h1>
-        <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-          Last updated: June 10, 2026. Your privacy is of the utmost importance to us. This Privacy Policy details how Shaarts Calligraphy handles and protects the information collected from visitors of our website.
+        <p className="font-sans text-lg leading-relaxed text-parchment-dim">
+          Last updated 10 June 2026. This policy explains how Shaarts Calligraphy handles and protects
+          information collected from visitors to this site.
         </p>
       </div>
 
-      {/* Policy Content Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-        {/* Sidebar Navigation (quick jumps) */}
-        <div className="lg:col-span-4 sticky top-32 hidden lg:block border-l border-primary/10 pl-6 space-y-4">
-          <p className="font-label-md text-xs tracking-wider text-primary uppercase mb-6">Sections</p>
-          <a href="#information-collection" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">1. Information We Collect</a>
-          <a href="#information-use" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">2. How We Use Information</a>
-          <a href="#information-sharing" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">3. Information Sharing</a>
-          <a href="#analytics-cookies" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">4. Cookies & Analytics</a>
-          <a href="#data-security" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">5. Data Security</a>
-          <a href="#your-rights" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">6. Your Legal Rights</a>
-          <a href="#contact-us" className="block font-label-md text-sm text-on-surface-variant hover:text-secondary transition-colors duration-300">7. Contact Information</a>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        {/* Index */}
+        <nav className="lg:col-span-4 sticky top-32 hidden lg:block border-l border-line pl-6">
+          <p className="font-mono text-[0.62rem] uppercase tracking-[0.26em] text-gold/70 mb-5">Sections</p>
+          <ol className="space-y-3">
+            {sections.map((s, i) => (
+              <li key={s.id}>
+                <a
+                  href={`#${s.id}`}
+                  className="group flex items-baseline gap-3 font-sans text-sm text-parchment-dim hover:text-parchment transition-colors duration-300"
+                >
+                  <span className="font-mono text-[0.65rem] text-gold/60">{String(i + 1).padStart(2, '0')}</span>
+                  {s.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
 
-        {/* Main Text Content */}
-        <div className="lg:col-span-8 space-y-12 bg-surface-container-low p-8 md:p-12 border border-primary/5">
-          {/* Section 1 */}
-          <section id="information-collection" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">1. Information We Collect</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              We collect personal information that you voluntarily provide to us when inquiring about custom calligraphy or commission projects. This information includes:
-            </p>
-            <ul className="list-disc pl-5 space-y-2 font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              <li><strong>Contact Information:</strong> Your name and email address.</li>
-              <li><strong>Project Specifications:</strong> Dimensions, medium, script styles, and detailed project descriptions you supply.</li>
-              <li><strong>Interaction Information:</strong> Messages and context shared during the commission intake process.</li>
-            </ul>
-          </section>
-
-          {/* Section 2 */}
-          <section id="information-use" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">2. How We Use Your Information</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Your personal information is used exclusively to deliver bespoke artwork services, including:
-            </p>
-            <ul className="list-disc pl-5 space-y-2 font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              <li>Reviewing and responding to your custom commission proposals.</li>
-              <li>Communicating project updates, design revisions, and billing milestones.</li>
-              <li>Analyzing site performance trends to refine user navigation and overall experience.</li>
-            </ul>
-          </section>
-
-          {/* Section 3 */}
-          <section id="information-sharing" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">3. Information Sharing</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              We respect your privacy. Under no circumstances do we sell, rent, lease, or trade your personal information to third parties. We only share information with trusted third-party services necessary for operating our site, conducting business, or completing financial transactions, provided those parties agree to keep all information confidential.
-            </p>
-          </section>
-
-          {/* Section 4 */}
-          <section id="analytics-cookies" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">4. Cookies & Analytics</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              We use standard cookies and tracking pixels through **Google Analytics** to understand how visitors interact with the site. This service compiles anonymous user traffic reports (such as pages visited, geographic region, and referral sources) to help us optimize performance. You can choose to disable cookies through your browser settings without affecting your access to the site.
-            </p>
-          </section>
-
-          {/* Section 5 */}
-          <section id="data-security" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">5. Data Security</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              We implement comprehensive security protocols (including SSL encryption) to guard the transmission of your form details. While we take extensive precautions to safeguard data, no internet transmission or electronic storage is completely secure; therefore, we cannot guarantee absolute security.
-            </p>
-          </section>
-
-          {/* Section 6 */}
-          <section id="your-rights" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">6. Your Legal Rights</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Depending on your location, you may have the right to request access to, correction of, or deletion of the personal information we hold about you. To request deletion of inquiry emails or contact records, please reach out directly using the address below.
-            </p>
-          </section>
-
-          {/* Section 7 */}
-          <section id="contact-us" className="space-y-4 scroll-mt-32">
-            <h2 className="font-headline-md text-headline-md text-primary">7. Contact Information</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              If you have questions regarding this Privacy Policy, or wish to request data updates/deletion, please contact us:
-            </p>
-            <div className="pt-2">
-              <a 
-                href={`mailto:${CONFIG.EMAIL}`}
-                className="inline-block px-8 py-3 bg-primary text-white font-label-md text-label-md tracking-widest hover:bg-gold-leaf transition-colors duration-300"
-              >
-                EMAIL US ({CONFIG.EMAIL})
-              </a>
-            </div>
-          </section>
+        {/* Content */}
+        <div className="lg:col-span-8 space-y-px bg-line border border-line">
+          {sections.map((s, i) => (
+            <section key={s.id} id={s.id} className="bg-ink-2/60 p-8 md:p-10 space-y-4 scroll-mt-32">
+              <div className="flex items-baseline gap-4">
+                <span className="font-mono text-[0.7rem] text-gold/70">{String(i + 1).padStart(2, '0')}</span>
+                <h2 className="font-display text-xl md:text-2xl font-light text-parchment">{s.title}</h2>
+              </div>
+              {s.body}
+            </section>
+          ))}
         </div>
       </div>
-
-      {/* Subtle Divider */}
-      <hr className="mt-section-gap border-t border-primary/10" />
     </div>
   );
 }
