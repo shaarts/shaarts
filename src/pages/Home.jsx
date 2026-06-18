@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { CONFIG } from '../config';
 
 const HeroStroke = lazy(() => import('../components/HeroStroke'));
+const InstagramFeed = lazy(() => import('../components/InstagramFeed'));
+const FacebookTimeline = lazy(() => import('../components/FacebookTimeline'));
 
 // The flat draw-on stroke — load fallback and reduced-motion / no-WebGL fallback.
 function SvgStroke() {
@@ -36,17 +38,14 @@ function supportsWebGL() {
 
 import heroBismillah from '../assets/artwork/hero-bg.jpg';
 import aboutArtist from '../assets/artwork/about-artist.png';
-import scriptThuluth from '../assets/artwork/script-thuluth.jpg';
-import scriptDiwani from '../assets/artwork/script-diwani.jpg';
-import scriptNaskh from '../assets/artwork/script-naskh.jpg';
+import artThronePanel from '../assets/artwork/art-throne-panel.jpg';
+import artNamesMandala from '../assets/artwork/art-names-mandala.jpg';
+import artDomeOfTheRock from '../assets/artwork/art-dome-of-the-rock.jpg';
 import artAyatulKursiGold from '../assets/artwork/art-ayatul-kursi-gold.jpg';
 import artAsmaulHusnaWheel from '../assets/artwork/art-asmaul-husna-wheel.jpg';
 import artAsmaulHusnaMosaic from '../assets/artwork/art-asmaul-husna-mosaic.jpg';
 import artMihrabOfLight from '../assets/artwork/art-mihrab-of-light.jpg';
 import artAllahAzure from '../assets/artwork/art-allah-azure.jpg';
-import pieceGoldenBreath from '../assets/artwork/piece-golden-breath.jpg';
-import pieceManifestation from '../assets/artwork/piece-manifestation.jpg';
-import pieceGoldLeaf from '../assets/artwork/piece-gold-leaf.jpg';
 
 // Move a card's spotlight to follow the cursor
 const handleSpotlight = (e) => {
@@ -55,24 +54,24 @@ const handleSpotlight = (e) => {
   e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
 };
 
-const scripts = [
+const series = [
   {
-    name: 'Thuluth',
-    ar: 'ثُلُث',
-    img: scriptThuluth,
-    note: 'The monumental hand of the mosque. Tall verticals, deep curves — reserved for verse.',
+    name: 'The Throne Verse',
+    ar: 'آية الكرسي',
+    img: artThronePanel,
+    note: 'Ayatul Kursi, returned to again and again — the verse of the Throne drawn out in gold on a deep black ground.',
   },
   {
-    name: 'Diwani',
-    ar: 'ديواني',
-    img: scriptDiwani,
-    note: 'The ornamental court script. Dense, interlocking, almost musical in its flourish.',
+    name: 'The Divine Names',
+    ar: 'أسماء الله الحسنى',
+    img: artNamesMandala,
+    note: 'The ninety-nine Names set in radial Kufic and mosaic — remembrance arranged as geometry, colour and light.',
   },
   {
-    name: 'Naskh',
-    ar: 'نَسْخ',
-    img: scriptNaskh,
-    note: 'The clear, readable hand of the manuscript — the script the Qur’an is copied in.',
+    name: 'Sanctuaries',
+    ar: 'المساجد',
+    img: artDomeOfTheRock,
+    note: 'The domes of the noble sanctuaries — Al-Aqsa and the Dome of the Rock — carried in gold, stone and patient light.',
   },
 ];
 
@@ -119,7 +118,6 @@ const works = [
   },
 ];
 
-const feed = [pieceGoldenBreath, pieceManifestation, pieceGoldLeaf];
 
 export default function Home() {
   // Only mount the WebGL hero when it's welcome: motion allowed + WebGL present.
@@ -292,17 +290,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──────────────── SCRIPT FAMILIES ──────────────── */}
+      {/* ──────────────── SERIES / THE WORK ──────────────── */}
       <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-24 md:py-section-gap">
         <div className="reveal-on-scroll mb-14">
-          <p className="font-mono text-eyebrow uppercase text-gold mb-5">The Hands · الخطوط</p>
+          <p className="font-mono text-eyebrow uppercase text-gold mb-5">The Work · الأعمال</p>
           <h2 className="font-display text-display-sm font-light text-parchment max-w-2xl leading-[1.05]">
-            Three classical scripts, each with its own voice.
+            What the studio returns to.
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {scripts.map((s) => (
+          {series.map((s) => (
             <article
               key={s.name}
               onMouseMove={handleSpotlight}
@@ -377,19 +375,21 @@ export default function Home() {
               A limited number of custom pieces are accepted each year for collectors and institutions
               worldwide. Bring a verse, a name, or a story — and we’ll shape it in ink and gold.
             </p>
-            <Link
+            <a
               id="cta-inquire"
-              to="/custom-calligraphy"
+              href={CONFIG.INSTAGRAM_DM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-3 bg-gold px-10 py-4 font-mono text-[0.72rem] uppercase tracking-[0.2em] text-ink hover:bg-gold-glow transition-colors duration-300"
             >
               Begin an inquiry
               <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ──────────────── INSTAGRAM ──────────────── */}
+      {/* ──────────────── SOCIAL FEEDS ──────────────── */}
       <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 md:pb-section-gap reveal-on-scroll">
         <div className="kashida mb-14"><span className="kashida__dot" /></div>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -414,22 +414,38 @@ export default function Home() {
             <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_outward</span>
           </a>
         </div>
-        <div className="grid grid-cols-3 gap-3 md:gap-7">
-          {feed.map((img, i) => (
+
+        <Suspense fallback={<div className="grid grid-cols-3 gap-3 md:gap-7">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-square bg-ink-2/60 border border-line" />)}</div>}>
+          <InstagramFeed />
+        </Suspense>
+
+        {/* Facebook */}
+        <div className="mt-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div>
+              <p className="font-mono text-eyebrow uppercase text-gold mb-4">Also on Facebook</p>
+              <a
+                href={CONFIG.FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-display text-3xl font-light text-parchment hover:text-gold-glow transition-colors duration-300"
+              >
+                Shaarts Calligraphy
+              </a>
+            </div>
             <a
-              key={i}
-              href={`https://www.instagram.com/${CONFIG.INSTAGRAM_USERNAME}/`}
+              href={CONFIG.FACEBOOK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onMouseMove={handleSpotlight}
-              className="specimen group relative overflow-hidden aspect-square"
+              className="group inline-flex items-center gap-3 border border-line px-7 py-3.5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-parchment hover:border-gold hover:text-gold transition-colors duration-300 self-start md:self-auto"
             >
-              <img src={img} alt="Recent work on Instagram" className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-[3]">
-                <span className="material-symbols-outlined text-gold text-3xl">photo_camera</span>
-              </div>
+              Follow on Facebook
+              <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_outward</span>
             </a>
-          ))}
+          </div>
+          <Suspense fallback={<div className="w-full max-w-[500px] mx-auto h-[640px] bg-ink-2/60 border border-line" />}>
+            <FacebookTimeline />
+          </Suspense>
         </div>
       </section>
     </div>
