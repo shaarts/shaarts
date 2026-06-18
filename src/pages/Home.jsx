@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { CONFIG } from '../config';
 
 const HeroStroke = lazy(() => import('../components/HeroStroke'));
+const InstagramFeed = lazy(() => import('../components/InstagramFeed'));
+const FacebookTimeline = lazy(() => import('../components/FacebookTimeline'));
 
 // The flat draw-on stroke — load fallback and reduced-motion / no-WebGL fallback.
 function SvgStroke() {
@@ -44,9 +46,6 @@ import artAsmaulHusnaWheel from '../assets/artwork/art-asmaul-husna-wheel.jpg';
 import artAsmaulHusnaMosaic from '../assets/artwork/art-asmaul-husna-mosaic.jpg';
 import artMihrabOfLight from '../assets/artwork/art-mihrab-of-light.jpg';
 import artAllahAzure from '../assets/artwork/art-allah-azure.jpg';
-import pieceGoldenBreath from '../assets/artwork/piece-golden-breath.jpg';
-import pieceManifestation from '../assets/artwork/piece-manifestation.jpg';
-import pieceGoldLeaf from '../assets/artwork/piece-gold-leaf.jpg';
 
 // Move a card's spotlight to follow the cursor
 const handleSpotlight = (e) => {
@@ -119,7 +118,6 @@ const works = [
   },
 ];
 
-const feed = [pieceGoldenBreath, pieceManifestation, pieceGoldLeaf];
 
 export default function Home() {
   // Only mount the WebGL hero when it's welcome: motion allowed + WebGL present.
@@ -391,7 +389,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──────────────── INSTAGRAM ──────────────── */}
+      {/* ──────────────── SOCIAL FEEDS ──────────────── */}
       <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 md:pb-section-gap reveal-on-scroll">
         <div className="kashida mb-14"><span className="kashida__dot" /></div>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -416,22 +414,38 @@ export default function Home() {
             <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_outward</span>
           </a>
         </div>
-        <div className="grid grid-cols-3 gap-3 md:gap-7">
-          {feed.map((img, i) => (
+
+        <Suspense fallback={<div className="grid grid-cols-3 gap-3 md:gap-7">{Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-square bg-ink-2/60 border border-line" />)}</div>}>
+          <InstagramFeed />
+        </Suspense>
+
+        {/* Facebook */}
+        <div className="mt-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div>
+              <p className="font-mono text-eyebrow uppercase text-gold mb-4">Also on Facebook</p>
+              <a
+                href={CONFIG.FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-display text-3xl font-light text-parchment hover:text-gold-glow transition-colors duration-300"
+              >
+                Shaarts Calligraphy
+              </a>
+            </div>
             <a
-              key={i}
-              href={`https://www.instagram.com/${CONFIG.INSTAGRAM_USERNAME}/`}
+              href={CONFIG.FACEBOOK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onMouseMove={handleSpotlight}
-              className="specimen group relative overflow-hidden aspect-square"
+              className="group inline-flex items-center gap-3 border border-line px-7 py-3.5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-parchment hover:border-gold hover:text-gold transition-colors duration-300 self-start md:self-auto"
             >
-              <img src={img} alt="Recent work on Instagram" className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-ink/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center z-[3]">
-                <span className="material-symbols-outlined text-gold text-3xl">photo_camera</span>
-              </div>
+              Follow on Facebook
+              <span className="material-symbols-outlined text-[1.1rem] transition-transform duration-300 group-hover:translate-x-1">arrow_outward</span>
             </a>
-          ))}
+          </div>
+          <Suspense fallback={<div className="w-full max-w-[500px] mx-auto h-[640px] bg-ink-2/60 border border-line" />}>
+            <FacebookTimeline />
+          </Suspense>
         </div>
       </section>
     </div>
